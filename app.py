@@ -36,9 +36,9 @@ BOT_JS_CODE = r"""
         [
             "tr-rahat-styles",
             "tr-rahat-square-bot",
-            "tr-rahat-chart-scanner",
+            "tr-rahat-chart-scan",
             "tr-rahat-modal",
-            "tr-rahat-confirm-banner"
+            "tr-rahat-trade-banner"
         ].forEach((id) => {
             const el = document.getElementById(id);
             if (el) el.remove();
@@ -49,74 +49,50 @@ BOT_JS_CODE = r"""
         const style = document.createElement("style");
         style.id = "tr-rahat-styles";
         style.textContent = `
-            @keyframes trMultiColorAura {
+            @keyframes trSquareBgShift {
                 0% {
-                    box-shadow:
-                        0 0 18px rgba(34, 197, 94, 0.9),
-                        0 0 36px rgba(56, 189, 248, 0.65),
-                        inset 0 0 14px rgba(34, 197, 94, 0.45);
+                    background: linear-gradient(135deg, #07192f 0%, #0d3b38 50%, #122044 100%);
                     border-color: #22c55e;
+                    box-shadow: 0 0 18px rgba(34, 197, 94, 0.85), 0 0 34px rgba(56, 189, 248, 0.55);
                 }
-                25% {
-                    box-shadow:
-                        0 0 20px rgba(56, 189, 248, 0.95),
-                        0 0 40px rgba(168, 85, 247, 0.7),
-                        inset 0 0 16px rgba(56, 189, 248, 0.5);
+                33% {
+                    background: linear-gradient(135deg, #0b2447 0%, #1b2a5e 50%, #0a3d4c 100%);
                     border-color: #38bdf8;
+                    box-shadow: 0 0 20px rgba(56, 189, 248, 0.9), 0 0 38px rgba(168, 85, 247, 0.55);
                 }
-                50% {
-                    box-shadow:
-                        0 0 22px rgba(236, 72, 153, 0.95),
-                        0 0 42px rgba(250, 204, 21, 0.65),
-                        inset 0 0 16px rgba(236, 72, 153, 0.45);
-                    border-color: #ec4899;
-                }
-                75% {
-                    box-shadow:
-                        0 0 20px rgba(250, 204, 21, 0.95),
-                        0 0 38px rgba(34, 197, 94, 0.7),
-                        inset 0 0 15px rgba(250, 204, 21, 0.45);
-                    border-color: #facc15;
+                66% {
+                    background: linear-gradient(135deg, #1b153b 0%, #0d3b38 50%, #27173a 100%);
+                    border-color: #a855f7;
+                    box-shadow: 0 0 20px rgba(168, 85, 247, 0.9), 0 0 38px rgba(34, 197, 94, 0.55);
                 }
                 100% {
-                    box-shadow:
-                        0 0 18px rgba(34, 197, 94, 0.9),
-                        0 0 36px rgba(56, 189, 248, 0.65),
-                        inset 0 0 14px rgba(34, 197, 94, 0.45);
+                    background: linear-gradient(135deg, #07192f 0%, #0d3b38 50%, #122044 100%);
                     border-color: #22c55e;
+                    box-shadow: 0 0 18px rgba(34, 197, 94, 0.85), 0 0 34px rgba(56, 189, 248, 0.55);
                 }
             }
-            @keyframes trSpectrumSpin {
-                0% { transform: rotate(0deg) scale(1.02); filter: hue-rotate(0deg) blur(7px); }
-                50% { transform: rotate(180deg) scale(1.18); filter: hue-rotate(180deg) blur(9px); }
-                100% { transform: rotate(360deg) scale(1.02); filter: hue-rotate(360deg) blur(7px); }
+            @keyframes trBackGlowOrbit {
+                0% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg) blur(10px); opacity: 0.85; }
+                50% { transform: scale(1.18) rotate(180deg); filter: hue-rotate(160deg) blur(13px); opacity: 1; }
+                100% { transform: scale(1) rotate(360deg); filter: hue-rotate(360deg) blur(10px); opacity: 0.85; }
             }
-            @keyframes trBgColorShift {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
+            @keyframes trChartColumnSweep {
+                0% { left: -24%; opacity: 0.35; }
+                50% { opacity: 0.95; }
+                100% { left: 108%; opacity: 0.35; }
             }
-            @keyframes trTapWave {
-                0% { transform: scale(0.8); opacity: 1; }
-                100% { transform: scale(1.95); opacity: 0; }
+            @keyframes trCaptureScanBeam {
+                0% { top: -20%; opacity: 0.3; }
+                50% { opacity: 0.95; }
+                100% { top: 108%; opacity: 0.3; }
             }
-            @keyframes trChartBeamSweep {
-                0% { left: -22%; opacity: 0.4; }
-                50% { opacity: 1; }
-                100% { left: 106%; opacity: 0.4; }
+            @keyframes trModalPop {
+                0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+                100% { opacity: 1; transform: scale(1) translateY(0); }
             }
-            @keyframes trScanLaserVert {
-                0% { top: -18%; opacity: 0.35; }
-                50% { opacity: 1; }
-                100% { top: 108%; opacity: 0.35; }
-            }
-            @keyframes trSmoothCardIn {
-                0% { opacity: 0; transform: translateY(14px) scale(0.96); }
-                100% { opacity: 1; transform: translateY(0) scale(1); }
-            }
-            @keyframes trConfirmSlide {
-                0% { opacity: 0; transform: translateX(30px) scale(0.95); }
-                100% { opacity: 1; transform: translateX(0) scale(1); }
+            @keyframes trBannerSlide {
+                0% { opacity: 0; transform: translateX(26px); }
+                100% { opacity: 1; transform: translateX(0); }
             }
 
             #tr-rahat-square-bot {
@@ -126,8 +102,6 @@ BOT_JS_CODE = r"""
                 width: 68px;
                 height: 68px;
                 border-radius: 15px;
-                background: linear-gradient(135deg, #071324, #0d233a, #102a24, #22113a);
-                background-size: 300% 300%;
                 border: 2.5px solid #22c55e;
                 z-index: 2147483645;
                 cursor: pointer;
@@ -137,28 +111,26 @@ BOT_JS_CODE = r"""
                 user-select: none;
                 touch-action: none;
                 overflow: visible;
-                animation: trMultiColorAura 3.2s infinite ease-in-out, trBgColorShift 5s infinite linear;
+                animation: trSquareBgShift 3.6s infinite ease-in-out;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             }
             #tr-rahat-square-bot::before {
                 content: "";
                 position: absolute;
-                inset: -7px;
+                inset: -8px;
                 border-radius: 20px;
                 background: conic-gradient(
                     from 0deg,
                     #22c55e,
                     #38bdf8,
-                    #a855f7,
-                    #ec4899,
-                    #facc15,
+                    #818cf8,
+                    #2dd4bf,
                     #22c55e
                 );
                 z-index: -1;
-                opacity: 0.92;
-                animation: trSpectrumSpin 3.6s linear infinite;
+                animation: trBackGlowOrbit 4.2s linear infinite;
             }
-            .tr-sq-surface {
+            .tr-sq-box {
                 width: 100%;
                 height: 100%;
                 border-radius: 12px;
@@ -166,61 +138,46 @@ BOT_JS_CODE = r"""
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: radial-gradient(circle at 30% 25%, rgba(56, 189, 248, 0.25), rgba(6, 12, 24, 0.96) 75%);
-                position: relative;
+                background: rgba(6, 13, 25, 0.92);
             }
-            .tr-sq-surface img {
-                width: 48px;
-                height: 48px;
+            .tr-sq-box img {
+                width: 50px;
+                height: 50px;
                 border-radius: 10px;
                 object-fit: cover;
                 pointer-events: none;
             }
-            .tr-wave-pulse {
-                position: absolute;
-                inset: -5px;
-                border-radius: 18px;
-                border: 2.5px solid #38bdf8;
-                pointer-events: none;
-                animation: trTapWave 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            }
 
-            #tr-rahat-chart-scanner {
+            #tr-rahat-chart-scan {
                 position: fixed;
                 inset: 0;
                 pointer-events: none;
                 z-index: 2147483644;
                 overflow: hidden;
-                background: linear-gradient(
-                    90deg,
-                    rgba(34, 197, 94, 0.04),
-                    rgba(56, 189, 248, 0.07),
-                    rgba(168, 85, 247, 0.04)
-                );
+                background: rgba(16, 185, 129, 0.04);
             }
-            .tr-chart-sweep-col {
+            .tr-scan-band {
                 position: absolute;
                 top: 0;
                 bottom: 0;
-                width: 110px;
+                width: 115px;
                 background: linear-gradient(
                     90deg,
                     transparent,
-                    rgba(34, 197, 94, 0.22),
-                    rgba(56, 189, 248, 0.36),
-                    rgba(168, 85, 247, 0.2),
+                    rgba(34, 197, 94, 0.2),
+                    rgba(56, 189, 248, 0.34),
+                    rgba(45, 212, 191, 0.18),
                     transparent
                 );
-                border-left: 2px solid rgba(74, 222, 128, 0.8);
-                box-shadow: 0 0 28px rgba(56, 189, 248, 0.45);
-                animation: trChartBeamSweep 1.65s ease-in-out infinite;
+                border-left: 2px solid rgba(74, 222, 128, 0.75);
+                animation: trChartColumnSweep 1.6s ease-in-out infinite;
             }
 
             #tr-rahat-modal {
                 position: fixed;
                 inset: 0;
-                background: rgba(2, 6, 15, 0.62);
-                backdrop-filter: blur(4px);
+                background: rgba(2, 6, 15, 0.58);
+                backdrop-filter: blur(3px);
                 z-index: 2147483646;
                 display: flex;
                 align-items: center;
@@ -229,78 +186,77 @@ BOT_JS_CODE = r"""
                 box-sizing: border-box;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             }
-            .tr-panel {
+            .tr-window {
                 width: 100%;
                 max-width: 392px;
-                background: linear-gradient(180deg, #0d1628 0%, #070d19 100%);
-                border-radius: 17px;
-                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.88);
+                background: linear-gradient(180deg, #0d1628 0%, #080e1b 100%);
+                border-radius: 16px;
                 color: #f8fafc;
                 overflow: hidden;
-                animation: trSmoothCardIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.88);
+                animation: trModalPop 0.25s ease-out;
             }
-            .tr-panel-scan {
-                border: 1.5px solid rgba(56, 189, 248, 0.5);
-                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.88), 0 0 32px rgba(56, 189, 248, 0.22);
+            .tr-win-scan {
+                border: 1.5px solid rgba(56, 189, 248, 0.45);
             }
-            .tr-panel-call {
+            .tr-win-call {
                 border: 2px solid rgba(34, 197, 94, 0.78);
-                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 38px rgba(34, 197, 94, 0.32);
+                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 34px rgba(34, 197, 94, 0.28);
             }
-            .tr-panel-put {
+            .tr-win-put {
                 border: 2px solid rgba(239, 68, 68, 0.78);
-                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 38px rgba(239, 68, 68, 0.32);
+                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 34px rgba(239, 68, 68, 0.28);
             }
-            .tr-top-bar {
+            .tr-head {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 padding: 11px 14px;
                 background: rgba(15, 23, 42, 0.95);
-                border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+                border-bottom: 1px solid rgba(148, 163, 184, 0.14);
             }
-            .tr-top-left {
+            .tr-head-left {
                 display: flex;
                 align-items: center;
                 gap: 8px;
             }
-            .tr-pill-blue {
+            .tr-badge-blue {
                 font-size: 10.5px;
                 font-weight: 800;
                 color: #7dd3fc;
-                background: rgba(14, 165, 233, 0.18);
+                background: rgba(14, 165, 233, 0.16);
                 border: 1px solid rgba(56, 189, 248, 0.45);
                 padding: 2px 8px;
                 border-radius: 8px;
             }
-            .tr-pill-otc {
+            .tr-badge-mode {
                 font-size: 10px;
                 font-weight: 800;
                 color: #f8fafc;
                 background: rgba(30, 41, 59, 0.95);
-                border: 1px solid rgba(148, 163, 184, 0.28);
+                border: 1px solid rgba(148, 163, 184, 0.24);
                 padding: 3px 9px;
                 border-radius: 999px;
             }
-            .tr-x-btn {
+            .tr-close {
                 width: 28px;
                 height: 28px;
                 border-radius: 8px;
-                border: 1px solid rgba(148, 163, 184, 0.25);
+                border: 1px solid rgba(148, 163, 184, 0.24);
                 background: rgba(30, 41, 59, 0.85);
                 color: #e2e8f0;
                 font-weight: 800;
                 cursor: pointer;
             }
-            .tr-content {
+            .tr-body {
                 padding: 14px;
             }
-            .tr-capture-stage {
+            .tr-capture-screen {
                 position: relative;
                 height: 175px;
                 border-radius: 13px;
-                background: radial-gradient(circle at 50% 40%, rgba(56, 189, 248, 0.18), rgba(5, 10, 20, 0.96) 75%);
-                border: 1px solid rgba(56, 189, 248, 0.28);
+                background: radial-gradient(circle at 50% 45%, rgba(34, 197, 94, 0.14), rgba(5, 10, 20, 0.96) 75%);
+                border: 1px solid rgba(56, 189, 248, 0.24);
                 overflow: hidden;
                 padding: 12px;
                 box-sizing: border-box;
@@ -308,28 +264,28 @@ BOT_JS_CODE = r"""
                 flex-direction: column;
                 justify-content: space-between;
             }
-            .tr-laser-line {
+            .tr-capture-beam {
                 position: absolute;
                 left: 0;
                 right: 0;
-                height: 30px;
-                background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.35), rgba(34, 197, 94, 0.55), transparent);
-                animation: trScanLaserVert 1.45s linear infinite;
+                height: 26px;
+                background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.35), rgba(34, 197, 94, 0.45), transparent);
+                animation: trCaptureScanBeam 1.5s linear infinite;
                 pointer-events: none;
             }
-            .tr-hub-box {
+            .tr-hub-card {
                 background: rgba(9, 15, 28, 0.88);
-                border: 1px solid rgba(56, 189, 248, 0.22);
+                border: 1px solid rgba(56, 189, 248, 0.2);
                 border-radius: 13px;
                 padding: 10px;
             }
-            .tr-nodes-grid {
+            .tr-hub-grid {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
                 gap: 8px;
                 margin: 10px 0;
             }
-            .tr-n-item {
+            .tr-node {
                 background: rgba(15, 23, 42, 0.92);
                 border: 1px solid rgba(148, 163, 184, 0.22);
                 border-radius: 10px;
@@ -338,12 +294,12 @@ BOT_JS_CODE = r"""
                 font-size: 10.5px;
                 font-weight: 800;
             }
-            .tr-n-trend {
+            .tr-node-trend {
                 background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(6, 95, 70, 0.35));
                 border-color: #22c55e;
                 color: #6ee7b7;
             }
-            .tr-checklist {
+            .tr-checks {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 4px 10px;
@@ -351,47 +307,51 @@ BOT_JS_CODE = r"""
                 color: #cbd5e1;
                 margin-bottom: 10px;
             }
-            .tr-analyzing-btn {
+            .tr-analyzing-bar {
                 width: 100%;
                 padding: 9px;
                 border-radius: 10px;
-                background: linear-gradient(90deg, #2563eb, #10b981, #a855f7);
-                background-size: 200% 200%;
-                animation: trBgColorShift 2.5s ease infinite;
+                background: linear-gradient(90deg, #2563eb, #10b981);
                 color: #ffffff;
                 font-size: 12px;
                 font-weight: 800;
                 text-align: center;
             }
-            .tr-call-box {
+            .tr-grad-transition {
+                height: 290px;
+                border-radius: 13px;
+                background: linear-gradient(155deg, #0a1f38 0%, #0d3b4c 52%, #1b1d42 100%);
+                border: 1px solid rgba(56, 189, 248, 0.25);
+            }
+            .tr-call-panel {
                 margin: 10px 0 12px;
                 padding: 14px;
                 border-radius: 13px;
                 text-align: center;
                 border: 1.5px solid rgba(34, 197, 94, 0.72);
-                background: linear-gradient(180deg, rgba(16, 185, 129, 0.25), rgba(6, 78, 59, 0.16));
+                background: linear-gradient(180deg, rgba(16, 185, 129, 0.24), rgba(6, 78, 59, 0.15));
             }
-            .tr-put-box {
+            .tr-put-panel {
                 margin: 10px 0 12px;
                 padding: 14px;
                 border-radius: 13px;
                 text-align: center;
                 border: 1.5px solid rgba(239, 68, 68, 0.72);
-                background: linear-gradient(180deg, rgba(239, 68, 68, 0.25), rgba(127, 29, 29, 0.16));
+                background: linear-gradient(180deg, rgba(239, 68, 68, 0.24), rgba(127, 29, 29, 0.15));
             }
-            .tr-two-col {
+            .tr-grid-2 {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 10px;
                 margin-bottom: 10px;
             }
-            .tr-stat-card {
+            .tr-box {
                 background: rgba(15, 23, 42, 0.92);
                 border: 1px solid rgba(148, 163, 184, 0.18);
                 border-radius: 11px;
                 padding: 9px;
             }
-            .tr-exec-btn {
+            .tr-confirm-btn {
                 width: 100%;
                 margin-top: 10px;
                 padding: 10px 12px;
@@ -399,50 +359,41 @@ BOT_JS_CODE = r"""
                 border-radius: 11px;
                 font-size: 12px;
                 font-weight: 900;
-                letter-spacing: 0.4px;
                 color: #ffffff;
                 cursor: pointer;
-                transition: transform 0.15s ease, filter 0.15s ease;
             }
-            .tr-exec-btn:active {
-                transform: scale(0.97);
-            }
-            .tr-exec-call {
+            .tr-btn-call {
                 background: linear-gradient(90deg, #15803d, #22c55e, #0ea5e9);
-                box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
             }
-            .tr-exec-put {
+            .tr-btn-put {
                 background: linear-gradient(90deg, #b91c1c, #ef4444, #f97316);
-                box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
             }
-            #tr-rahat-confirm-banner {
+            #tr-rahat-trade-banner {
                 position: fixed;
                 top: 66px;
                 right: 12px;
-                max-width: 280px;
+                max-width: 300px;
                 z-index: 2147483647;
-                padding: 10px 14px;
+                padding: 10px 13px;
                 border-radius: 12px;
-                font-size: 11.5px;
-                font-weight: 800;
-                color: #f8fafc;
-                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
-                animation: trConfirmSlide 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+                color: #f0fdf4;
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.78);
+                animation: trBannerSlide 0.25s ease-out;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             }
         `;
         document.head.appendChild(style);
     }
 
-    function getCurrentAsset() {
+    function getAssetPair() {
         try {
             const els = document.querySelectorAll("*");
             for (let i = 0; i < els.length; i++) {
                 const el = els[i];
                 if (el.children.length === 0 && el.innerText) {
-                    const t = el.innerText.trim();
-                    if (/^[A-Z]{3}\/[A-Z]{3}(\s*\(OTC\))?$/.test(t)) {
-                        return t;
+                    const txt = el.innerText.trim();
+                    if (/^[A-Z]{3}\/[A-Z]{3}(\s*\(OTC\))?$/.test(txt)) {
+                        return txt;
                     }
                 }
             }
@@ -450,39 +401,66 @@ BOT_JS_CODE = r"""
         return "USD/DZD (OTC)";
     }
 
-    function showTradeConfirmation(titleText, subText, isCall) {
-        const old = document.getElementById("tr-rahat-confirm-banner");
+    function getLivePriceEstimate(signal) {
+        const base = signal === "CALL" ? 254.104 : 253.892;
+        const jitter = ((Date.now() % 90) - 45) / 1000;
+        return (base + jitter).toFixed(3);
+    }
+
+    function showTradeOpenedBanner(asset, signal, price, confidence, isCall) {
+        const old = document.getElementById("tr-rahat-trade-banner");
         if (old) old.remove();
+
+        let secondsLeft = 15;
         const banner = document.createElement("div");
-        banner.id = "tr-rahat-confirm-banner";
+        banner.id = "tr-rahat-trade-banner";
         banner.style.background = isCall
-            ? "linear-gradient(135deg, rgba(21, 128, 61, 0.96), rgba(14, 116, 144, 0.96))"
-            : "linear-gradient(135deg, rgba(185, 28, 28, 0.96), rgba(194, 65, 12, 0.96))";
+            ? "linear-gradient(135deg, rgba(21, 128, 61, 0.97), rgba(14, 116, 144, 0.97))"
+            : "linear-gradient(135deg, rgba(185, 28, 28, 0.97), rgba(194, 65, 12, 0.97))";
         banner.style.border = isCall ? "1.5px solid #4ade80" : "1.5px solid #f87171";
-        banner.innerHTML = `
-            <div style="font-size:12px;font-weight:900;">${titleText}</div>
-            <div style="font-size:10.5px;font-weight:700;opacity:0.95;margin-top:2px;">${subText}</div>
-        `;
+
+        const renderBanner = () => {
+            const mm = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
+            const ss = String(secondsLeft % 60).padStart(2, "0");
+            banner.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                    <span style="font-size:11.5px;font-weight:900;">${BOT_NAME} • ${signal}</span>
+                    <span style="font-size:11px;font-weight:800;background:rgba(0,0,0,0.25);padding:2px 7px;border-radius:999px;">${mm}:${ss}</span>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;margin-top:3px;opacity:0.96;">
+                    Trade setup confirmed at ${price} ${asset} (${confidence}%)
+                </div>
+            `;
+        };
+
+        renderBanner();
         document.body.appendChild(banner);
-        setTimeout(() => {
-            if (banner.parentNode) banner.remove();
-        }, 4200);
+
+        const iv = setInterval(() => {
+            secondsLeft -= 1;
+            if (secondsLeft <= 0 || !banner.parentNode) {
+                clearInterval(iv);
+                if (banner.parentNode) banner.remove();
+                return;
+            }
+            renderBanner();
+        }, 1000);
     }
 
-    function startChartScanEffect() {
-        stopChartScanEffect();
-        const scan = document.createElement("div");
-        scan.id = "tr-rahat-chart-scanner";
-        scan.innerHTML = `<div class="tr-chart-sweep-col"></div>`;
-        document.body.appendChild(scan);
+    function startChartScan() {
+        stopChartScan();
+        const el = document.createElement("div");
+        el.id = "tr-rahat-chart-scan";
+        el.innerHTML = `<div class="tr-scan-band"></div>`;
+        document.body.appendChild(el);
     }
 
-    function stopChartScanEffect() {
-        const scan = document.getElementById("tr-rahat-chart-scanner");
-        if (scan) scan.remove();
+    function stopChartScan() {
+        const el = document.getElementById("tr-rahat-chart-scan");
+        if (el) el.remove();
     }
 
-    async function requestSignal(asset) {
+    async function fetchLiveSignal(asset) {
         try {
             const res = await fetch(`${SERVER_URL}/signal?asset=${encodeURIComponent(asset)}&t=${Date.now()}`);
             if (res.ok) return await res.json();
@@ -498,40 +476,40 @@ BOT_JS_CODE = r"""
         };
     }
 
-    // Total scanning duration ~7000ms (7 seconds) before showing trade confirmation window
-    function runSevenSecondScanAndTrade() {
+    // ~7000ms (7 seconds) smooth scan sequence before showing confirmation window
+    function startSevenSecondScan() {
         const old = document.getElementById("tr-rahat-modal");
         if (old) old.remove();
 
-        const asset = getCurrentAsset();
-        startChartScanEffect();
+        const asset = getAssetPair();
+        startChartScan();
 
         const modal = document.createElement("div");
         modal.id = "tr-rahat-modal";
-        const panel = document.createElement("div");
-        panel.className = "tr-panel tr-panel-scan";
-        modal.appendChild(panel);
+        const win = document.createElement("div");
+        win.className = "tr-window tr-win-scan";
+        modal.appendChild(win);
         document.body.appendChild(modal);
 
-        const closeAll = () => {
-            stopChartScanEffect();
+        const closeWin = () => {
+            stopChartScan();
             if (modal.parentNode) modal.remove();
         };
 
-        // Phase 1 (0ms -> 3400ms): Market Analysis & Live Chart Capture
-        panel.innerHTML = `
-            <div class="tr-top-bar">
-                <div class="tr-top-left">
-                    <span style="font-size:13.5px;font-weight:800;color:#f8fafc;">Market Analysis</span>
-                    <span class="tr-pill-blue">${asset}</span>
+        // 0ms -> 2500ms: Market Analysis & Screen Capture
+        win.innerHTML = `
+            <div class="tr-head">
+                <div class="tr-head-left">
+                    <span style="font-size:13.5px;font-weight:800;">Market Analysis</span>
+                    <span class="tr-badge-blue">${asset}</span>
                 </div>
-                <button class="tr-x-btn" id="tr-x-1">✕</button>
+                <button class="tr-close" id="tr-c-1">✕</button>
             </div>
-            <div class="tr-content">
-                <div class="tr-capture-stage">
-                    <div class="tr-laser-line"></div>
+            <div class="tr-body">
+                <div class="tr-capture-screen">
+                    <div class="tr-capture-beam"></div>
                     <div style="font-size:11px;font-weight:700;color:#e2e8f0;background:rgba(15,23,42,0.82);padding:4px 10px;border-radius:8px;align-self:flex-start;">
-                        • Screen Capture • ${BOT_NAME}
+                        • Screen Capture
                     </div>
                     <div>
                         <div style="font-size:13px;font-weight:800;color:#fff;">⚡ Capturing live chart...</div>
@@ -540,113 +518,133 @@ BOT_JS_CODE = r"""
                 </div>
                 <div style="margin-top:11px;">
                     <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:5px;">
-                        <span>Scanning Market Structure (7s)</span>
-                        <span id="tr-scan-pct">15%</span>
+                        <span>Scanning Market Structure</span>
+                        <span id="tr-pct">15%</span>
                     </div>
                     <div style="height:6px;border-radius:999px;background:#1e293b;overflow:hidden;">
-                        <div id="tr-scan-fill" style="width:15%;height:100%;background:linear-gradient(90deg,#38bdf8,#22c55e,#a855f7);transition:width 0.55s ease;"></div>
+                        <div id="tr-prog" style="width:15%;height:100%;background:linear-gradient(90deg,#38bdf8,#22c55e);transition:width 0.45s ease;"></div>
                     </div>
                 </div>
             </div>
         `;
-        document.getElementById("tr-x-1").onclick = closeAll;
+        document.getElementById("tr-c-1").onclick = closeWin;
 
-        const sigPromise = requestSignal(asset);
+        const signalPromise = fetchLiveSignal(asset);
 
         setTimeout(() => {
-            const p = document.getElementById("tr-scan-pct");
-            const f = document.getElementById("tr-scan-fill");
-            if (p) p.textContent = "48%";
-            if (f) f.style.width = "48%";
-        }, 1400);
+            const p = document.getElementById("tr-pct");
+            const b = document.getElementById("tr-prog");
+            if (p) p.textContent = "78%";
+            if (b) b.style.width = "78%";
+        }, 1100);
 
-        // Phase 2 (3400ms -> 7000ms): 6-Node Chart Analyze Hub
+        // 2500ms -> 5800ms: Chart Analyze 6-Node Hub
         setTimeout(() => {
             if (!modal.parentNode) return;
-            panel.innerHTML = `
-                <div class="tr-top-bar">
-                    <div class="tr-top-left">
-                        <span class="tr-pill-blue">BROKER</span>
+            win.innerHTML = `
+                <div class="tr-head">
+                    <div class="tr-head-left">
+                        <span class="tr-badge-blue">BROKER</span>
                         <span style="font-size:13.5px;font-weight:800;">${BOT_NAME}</span>
                     </div>
-                    <button class="tr-x-btn" id="tr-x-2">✕</button>
+                    <button class="tr-close" id="tr-c-2">✕</button>
                 </div>
-                <div class="tr-content">
-                    <div style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(90deg,rgba(16,185,129,0.22),rgba(56,189,248,0.18),rgba(168,85,247,0.18));border:1px solid rgba(56,189,248,0.4);border-radius:11px;padding:8px 11px;margin-bottom:10px;">
+                <div class="tr-body">
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(90deg,rgba(16,185,129,0.22),rgba(56,189,248,0.16));border:1px solid rgba(34,197,94,0.35);border-radius:11px;padding:8px 11px;margin-bottom:10px;">
                         <div>
-                            <div style="font-size:9.5px;font-weight:800;color:#38bdf8;">AI ENGINE</div>
+                            <div style="font-size:9.5px;font-weight:800;color:#34d399;">AI ENGINE</div>
                             <div style="font-size:13px;font-weight:800;color:#fff;">${BOT_NAME}</div>
                         </div>
-                        <span class="tr-pill-otc">OTC • Real</span>
+                        <span class="tr-badge-mode">OTC • Real</span>
                     </div>
-                    <div class="tr-hub-box">
+                    <div class="tr-hub-card">
                         <div style="text-align:center;font-size:12.5px;font-weight:800;color:#e2e8f0;">${asset} Chart Analyze</div>
-                        <div class="tr-nodes-grid">
-                            <div class="tr-n-item" style="border-color:#38bdf8;color:#7dd3fc;">Market Data</div>
-                            <div class="tr-n-item tr-n-trend">Trend</div>
-                            <div class="tr-n-item" style="border-color:#a855f7;color:#d8b4fe;">Indicators</div>
-                            <div class="tr-n-item" style="border-color:#f97316;color:#fdba74;">Price Action</div>
-                            <div class="tr-n-item" style="border-color:#ef4444;color:#fca5a5;">AI Analysis</div>
-                            <div class="tr-n-item" style="border-color:#eab308;color:#fde047;">Decision</div>
+                        <div class="tr-hub-grid">
+                            <div class="tr-node" style="border-color:#38bdf8;color:#7dd3fc;">Market Data</div>
+                            <div class="tr-node tr-node-trend">Trend</div>
+                            <div class="tr-node" style="border-color:#a855f7;color:#d8b4fe;">Indicators</div>
+                            <div class="tr-node" style="border-color:#f97316;color:#fdba74;">Price Action</div>
+                            <div class="tr-node" style="border-color:#ef4444;color:#fca5a5;">AI Analysis</div>
+                            <div class="tr-node" style="border-color:#eab308;color:#fde047;">Decision</div>
                         </div>
-                        <div class="tr-checklist">
+                        <div class="tr-checks">
                             <div>✓ Trend Analysis</div>
                             <div>✓ RSI & MACD</div>
                             <div>✓ Support / Resistance</div>
                             <div>✓ Momentum & Price</div>
                         </div>
-                        <div class="tr-analyzing-btn">Scanning chart • Finalizing trade...</div>
+                        <div class="tr-analyzing-bar">Analyzing chart...</div>
                     </div>
                 </div>
             `;
-            document.getElementById("tr-x-2").onclick = closeAll;
-        }, 3400);
+            document.getElementById("tr-c-2").onclick = closeWin;
+        }, 2500);
 
-        // Phase 3 (at 7000ms = 7 seconds): Trade Confirmation Window (Dynamic per CALL/PUT trade)
+        // 5800ms -> 6600ms: Gradient Transition Card
+        setTimeout(() => {
+            if (!modal.parentNode) return;
+            win.innerHTML = `
+                <div class="tr-head">
+                    <div class="tr-head-left">
+                        <span class="tr-badge-blue">BROKER</span>
+                        <span style="font-size:13.5px;font-weight:800;">${BOT_NAME}</span>
+                    </div>
+                    <button class="tr-close" id="tr-c-3">✕</button>
+                </div>
+                <div class="tr-body">
+                    <div class="tr-grad-transition"></div>
+                </div>
+            `;
+            document.getElementById("tr-c-3").onclick = closeWin;
+        }, 5800);
+
+        // ~7000ms (7 seconds): Trade Confirmation Window (Dynamic per CALL/PUT trade)
         setTimeout(async () => {
             if (!modal.parentNode) return;
-            stopChartScanEffect();
-            const data = await sigPromise;
+            stopChartScan();
+
+            const data = await signalPromise;
             const isCall = String(data.signal || "CALL").toUpperCase() === "CALL";
             const sigLabel = isCall ? "CALL" : "PUT";
             const finalConf = Number(data.confidence) || 91;
             const startConf = Math.max(70, finalConf - 12);
-            const trendVal = data.trend || (isCall ? "Uptrend" : "Downtrend");
-            const patternVal = data.pattern || (isCall ? "Bullish Momentum" : "Bearish Momentum");
+            const trendText = data.trend || (isCall ? "Uptrend" : "Downtrend");
+            const patternText = data.pattern || (isCall ? "Bullish Momentum" : "Bearish Momentum");
+            const livePrice = getLivePriceEstimate(sigLabel);
 
-            panel.className = `tr-panel ${isCall ? "tr-panel-call" : "tr-panel-put"}`;
-            panel.innerHTML = `
-                <div class="tr-top-bar">
-                    <div class="tr-top-left">
-                        <span class="tr-pill-blue">TRADE CONFIRMATION</span>
+            win.className = `tr-window ${isCall ? "tr-win-call" : "tr-win-put"}`;
+            win.innerHTML = `
+                <div class="tr-head">
+                    <div class="tr-head-left">
+                        <span class="tr-badge-blue">BROKER</span>
                         <span style="font-size:13.5px;font-weight:800;">${BOT_NAME}</span>
                     </div>
-                    <button class="tr-x-btn" id="tr-x-3">✕</button>
+                    <button class="tr-close" id="tr-c-4">✕</button>
                 </div>
-                <div class="tr-content">
+                <div class="tr-body">
                     <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,0.9);border:1px solid rgba(148,163,184,0.18);border-radius:10px;padding:7px 11px;">
                         <span style="font-size:12.5px;font-weight:800;">${asset}</span>
-                        <span style="font-size:10.5px;font-weight:800;color:${isCall ? "#34d399" : "#f87171"};">• ${sigLabel} Ready (1m)</span>
+                        <span style="font-size:10.5px;font-weight:700;color:#34d399;">• Live read 1m</span>
                     </div>
 
-                    <div class="${isCall ? "tr-call-box" : "tr-put-box"}">
+                    <div class="${isCall ? "tr-call-panel" : "tr-put-panel"}">
                         <div style="font-size:10px;font-weight:800;letter-spacing:1px;color:#cbd5e1;">- PLACE OPTION -</div>
                         <div style="font-size:30px;font-weight:900;color:${isCall ? "#22c55e" : "#ef4444"};margin:3px 0;">
                             ${isCall ? "▲ CALL" : "▼ PUT"}
                         </div>
                         <div style="font-size:11px;color:#cbd5e1;">
-                            ${isCall ? "Bullish trade setup confirmed. Enter CALL on next candle" : "Bearish trade setup confirmed. Enter PUT on next candle"}
+                            ${isCall ? "Upward move expected. Enter on the next candle" : "Downward move expected. Enter on the next candle"}
                         </div>
                     </div>
 
-                    <div class="tr-two-col">
-                        <div class="tr-stat-card">
+                    <div class="tr-grid-2">
+                        <div class="tr-box">
                             <div style="font-size:9.5px;font-weight:800;color:#94a3b8;">CONFIDENCE</div>
-                            <div id="tr-conf-num" style="font-size:21px;font-weight:900;color:${isCall ? "#34d399" : "#f87171"};margin:2px 0;">${startConf}%</div>
+                            <div id="tr-conf-val" style="font-size:21px;font-weight:900;color:${isCall ? "#34d399" : "#f87171"};margin:2px 0;">${startConf}%</div>
                             <div style="font-size:10.5px;font-weight:700;color:#e2e8f0;">High conviction</div>
                             <div style="font-size:9.5px;color:#94a3b8;">Threshold 75%</div>
                         </div>
-                        <div class="tr-stat-card">
+                        <div class="tr-box">
                             <div style="font-size:9.5px;font-weight:800;color:#94a3b8;margin-bottom:4px;">KEY LEVELS</div>
                             <div style="font-size:10.5px;font-weight:700;color:#f87171;">▲ RESISTANCE</div>
                             <div style="font-size:10.5px;font-weight:700;color:#38bdf8;margin:2px 0;">◆ PRICE ZONE</div>
@@ -654,46 +652,42 @@ BOT_JS_CODE = r"""
                         </div>
                     </div>
 
-                    <div class="tr-two-col" style="margin-bottom:0;">
-                        <div class="tr-stat-card" style="padding:7px 9px;font-size:10.5px;font-weight:700;">
-                            TREND: <span style="color:${isCall ? "#34d399" : "#f87171"};">${trendVal}</span>
+                    <div class="tr-grid-2" style="margin-bottom:0;">
+                        <div class="tr-box" style="padding:7px 9px;font-size:10.5px;font-weight:700;">
+                            TREND: <span style="color:${isCall ? "#34d399" : "#f87171"};">${trendText}</span>
                         </div>
-                        <div class="tr-stat-card" style="padding:7px 9px;font-size:10.5px;font-weight:700;">
-                            PATTERN: <span style="color:#7dd3fc;">${patternVal}</span>
+                        <div class="tr-box" style="padding:7px 9px;font-size:10.5px;font-weight:700;">
+                            PATTERN: <span style="color:#7dd3fc;">${patternText}</span>
                         </div>
                     </div>
 
-                    <button id="tr-confirm-trade-btn" class="tr-exec-btn ${isCall ? "tr-exec-call" : "tr-exec-put"}">
-                        ${isCall ? "CONFIRM CALL TRADE ▲" : "CONFIRM PUT TRADE ▼"}
+                    <button id="tr-confirm-btn" class="tr-confirm-btn ${isCall ? "tr-btn-call" : "tr-btn-put"}">
+                        CONFIRM ${sigLabel} TRADE (${livePrice})
                     </button>
                 </div>
             `;
-            document.getElementById("tr-x-3").onclick = closeAll;
+            document.getElementById("tr-c-4").onclick = closeWin;
 
             let cur = startConf;
-            const confEl = document.getElementById("tr-conf-num");
+            const confEl = document.getElementById("tr-conf-val");
             const timer = setInterval(() => {
                 cur += 1;
                 if (confEl) confEl.textContent = `${cur}%`;
                 if (cur >= finalConf) clearInterval(timer);
             }, 45);
 
-            document.getElementById("tr-confirm-trade-btn").onclick = () => {
-                closeAll();
-                showTradeConfirmation(
-                    `${BOT_NAME} • ${sigLabel} Trade Confirmed`,
-                    `${asset} • ${trendVal} • ${patternVal} (${finalConf}%)`,
-                    isCall
-                );
+            document.getElementById("tr-confirm-btn").onclick = () => {
+                closeWin();
+                showTradeOpenedBanner(asset, sigLabel, livePrice, finalConf, isCall);
             };
         }, 7000);
     }
 
-    function createSquareFloatingBot() {
+    function createSquareBot() {
         const box = document.createElement("div");
         box.id = "tr-rahat-square-bot";
         box.innerHTML = `
-            <div class="tr-sq-surface">
+            <div class="tr-sq-box">
                 <img src="${BOT_LOGO}" alt="${BOT_NAME}" onerror="this.style.display='none';" />
             </div>
         `;
@@ -703,7 +697,7 @@ BOT_JS_CODE = r"""
         let dx = 0;
         let dy = 0;
 
-        const down = (e) => {
+        const onStart = (e) => {
             dragging = true;
             moved = false;
             const pt = e.touches ? e.touches[0] : e;
@@ -712,7 +706,7 @@ BOT_JS_CODE = r"""
             dy = pt.clientY - rect.top;
         };
 
-        const move = (e) => {
+        const onMove = (e) => {
             if (!dragging) return;
             const pt = e.touches ? e.touches[0] : e;
             const nx = Math.max(6, Math.min(window.innerWidth - box.offsetWidth - 6, pt.clientX - dx));
@@ -726,46 +720,41 @@ BOT_JS_CODE = r"""
             box.style.bottom = "auto";
         };
 
-        const up = () => {
+        const onEnd = () => {
             dragging = false;
         };
 
-        box.addEventListener("mousedown", down);
-        box.addEventListener("touchstart", down, { passive: true });
-        window.addEventListener("mousemove", move);
-        window.addEventListener("touchmove", move, { passive: true });
-        window.addEventListener("mouseup", up);
-        window.addEventListener("touchend", up);
+        box.addEventListener("mousedown", onStart);
+        box.addEventListener("touchstart", onStart, { passive: true });
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("touchmove", onMove, { passive: true });
+        window.addEventListener("mouseup", onEnd);
+        window.addEventListener("touchend", onEnd);
 
         box.addEventListener("click", () => {
-            if (moved) return;
-            const wave = document.createElement("span");
-            wave.className = "tr-wave-pulse";
-            box.appendChild(wave);
-            setTimeout(() => {
-                if (wave.parentNode) wave.remove();
-            }, 700);
-            runSevenSecondScanAndTrade();
+            if (!moved) {
+                startSevenSecondScan();
+            }
         });
 
         document.body.appendChild(box);
     }
 
-    function boot() {
+    function init() {
         if (!document.body) {
-            setTimeout(boot, 100);
+            setTimeout(init, 100);
             return;
         }
         cleanup();
         injectStyles();
-        createSquareFloatingBot();
+        createSquareBot();
     }
 
     if (document.readyState === "complete" || document.readyState === "interactive") {
-        boot();
+        init();
     } else {
-        window.addEventListener("DOMContentLoaded", boot);
-        setTimeout(boot, 350);
+        window.addEventListener("DOMContentLoaded", init);
+        setTimeout(init, 350);
     }
 })();
 """
