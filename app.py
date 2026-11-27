@@ -74,6 +74,7 @@ BOT_JS_CODE = r"""
 
     let isUnlockedInSession = false;
     let isSequenceRunning = false;
+    let lastSignalDirection = null;
 
     function cleanup() {
         [
@@ -96,41 +97,41 @@ BOT_JS_CODE = r"""
             @keyframes trSlowLightBorder {
                 0% {
                     border-color: #00ff88;
-                    box-shadow: 0 0 26px rgba(0, 255, 136, 0.9), 0 0 52px rgba(0, 229, 255, 0.55);
+                    box-shadow: 0 0 28px rgba(0, 255, 136, 0.95), 0 0 56px rgba(0, 229, 255, 0.65);
                 }
                 25% {
                     border-color: #00e5ff;
-                    box-shadow: 0 0 30px rgba(0, 229, 255, 0.95), 0 0 56px rgba(192, 38, 211, 0.6);
+                    box-shadow: 0 0 32px rgba(0, 229, 255, 1), 0 0 60px rgba(217, 70, 239, 0.7);
                 }
                 50% {
                     border-color: #ff00aa;
-                    box-shadow: 0 0 30px rgba(255, 0, 170, 0.95), 0 0 56px rgba(255, 214, 0, 0.6);
+                    box-shadow: 0 0 32px rgba(255, 0, 170, 1), 0 0 60px rgba(255, 214, 0, 0.7);
                 }
                 75% {
                     border-color: #ffd600;
-                    box-shadow: 0 0 30px rgba(255, 214, 0, 0.95), 0 0 56px rgba(0, 255, 136, 0.6);
+                    box-shadow: 0 0 32px rgba(255, 214, 0, 1), 0 0 60px rgba(0, 255, 136, 0.7);
                 }
                 100% {
                     border-color: #00ff88;
-                    box-shadow: 0 0 26px rgba(0, 255, 136, 0.9), 0 0 52px rgba(0, 229, 255, 0.55);
+                    box-shadow: 0 0 28px rgba(0, 255, 136, 0.95), 0 0 56px rgba(0, 229, 255, 0.65);
                 }
             }
             @keyframes trTopAvatarHighColor {
                 0% {
-                    background: linear-gradient(135deg, #00ff88, #00e5ff, #c026d3);
-                    box-shadow: 0 0 22px rgba(0, 255, 136, 0.95), 0 0 38px rgba(0, 229, 255, 0.8);
+                    background: linear-gradient(135deg, #00ff88, #00e5ff, #d946ef);
+                    box-shadow: 0 0 24px rgba(0, 255, 136, 1), 0 0 42px rgba(0, 229, 255, 0.85);
                 }
                 33% {
                     background: linear-gradient(135deg, #00e5ff, #ff00aa, #ffd600);
-                    box-shadow: 0 0 26px rgba(255, 0, 170, 0.95), 0 0 42px rgba(255, 214, 0, 0.8);
+                    box-shadow: 0 0 28px rgba(255, 0, 170, 1), 0 0 46px rgba(255, 214, 0, 0.85);
                 }
                 66% {
                     background: linear-gradient(135deg, #ffd600, #ff2a55, #00ff88);
-                    box-shadow: 0 0 26px rgba(255, 214, 0, 0.95), 0 0 42px rgba(255, 42, 85, 0.8);
+                    box-shadow: 0 0 28px rgba(255, 214, 0, 1), 0 0 46px rgba(255, 42, 85, 0.85);
                 }
                 100% {
-                    background: linear-gradient(135deg, #00ff88, #00e5ff, #c026d3);
-                    box-shadow: 0 0 22px rgba(0, 255, 136, 0.95), 0 0 38px rgba(0, 229, 255, 0.8);
+                    background: linear-gradient(135deg, #00ff88, #00e5ff, #d946ef);
+                    box-shadow: 0 0 24px rgba(0, 255, 136, 1), 0 0 42px rgba(0, 229, 255, 0.85);
                 }
             }
             @keyframes trAuthBtnShift {
@@ -140,79 +141,79 @@ BOT_JS_CODE = r"""
             }
             @keyframes trThickWavePulse {
                 0% {
-                    transform: scale(0.95);
-                    opacity: 0.96;
+                    transform: scale3d(0.95, 0.95, 1);
+                    opacity: 0.98;
                     border-color: #00ff88;
-                    box-shadow: 0 0 26px #00ff88, inset 0 0 14px #00ff88;
+                    box-shadow: 0 0 28px #00ff88, inset 0 0 14px #00ff88;
                 }
                 33% {
                     border-color: #00e5ff;
-                    box-shadow: 0 0 30px #00e5ff, inset 0 0 16px #00e5ff;
+                    box-shadow: 0 0 32px #00e5ff, inset 0 0 16px #00e5ff;
                 }
                 66% {
                     border-color: #ff00aa;
-                    box-shadow: 0 0 30px #ff00aa, inset 0 0 16px #ff00aa;
+                    box-shadow: 0 0 32px #ff00aa, inset 0 0 16px #ff00aa;
                 }
                 100% {
-                    transform: scale(1.44);
+                    transform: scale3d(1.45, 1.45, 1);
                     opacity: 0;
                     border-color: #ffd600;
-                    box-shadow: 0 0 32px #ffd600;
+                    box-shadow: 0 0 34px #ffd600;
                 }
             }
             @keyframes trBotBorderHue {
                 0% {
                     border-color: #00ff88;
-                    box-shadow: 0 0 28px rgba(0,255,136,1), 0 0 54px rgba(0,229,255,0.88);
+                    box-shadow: 0 0 30px rgba(0,255,136,1), 0 0 58px rgba(0,229,255,0.92);
                 }
                 25% {
                     border-color: #00e5ff;
-                    box-shadow: 0 0 32px rgba(0,229,255,1), 0 0 58px rgba(192,38,211,0.9);
+                    box-shadow: 0 0 34px rgba(0,229,255,1), 0 0 62px rgba(217,70,239,0.92);
                 }
                 50% {
                     border-color: #ff00aa;
-                    box-shadow: 0 0 32px rgba(255,0,170,1), 0 0 58px rgba(255,214,0,0.9);
+                    box-shadow: 0 0 34px rgba(255,0,170,1), 0 0 62px rgba(255,214,0,0.92);
                 }
                 75% {
                     border-color: #ffd600;
-                    box-shadow: 0 0 32px rgba(255,214,0,1), 0 0 58px rgba(0,255,136,0.9);
+                    box-shadow: 0 0 34px rgba(255,214,0,1), 0 0 62px rgba(0,255,136,0.92);
                 }
                 100% {
                     border-color: #00ff88;
-                    box-shadow: 0 0 28px rgba(0,255,136,1), 0 0 54px rgba(0,229,255,0.88);
+                    box-shadow: 0 0 30px rgba(0,255,136,1), 0 0 58px rgba(0,229,255,0.92);
                 }
             }
             @keyframes trBotBackdropShift {
                 0% {
-                    background: linear-gradient(135deg, #00ff88, #00e5ff, #b5179e, #ff00aa, #ffd600);
-                    opacity: 0.95;
+                    background: linear-gradient(135deg, #00ff88, #00e5ff, #c026d3, #ff00aa, #ffd600);
+                    opacity: 0.96;
                 }
                 50% {
-                    background: linear-gradient(225deg, #ffd600, #ff00aa, #7209b7, #00e5ff, #00ff88);
+                    background: linear-gradient(225deg, #ffd600, #ff00aa, #7c3aed, #00e5ff, #00ff88);
                     opacity: 1;
                 }
                 100% {
-                    background: linear-gradient(135deg, #00ff88, #00e5ff, #b5179e, #ff00aa, #ffd600);
-                    opacity: 0.95;
+                    background: linear-gradient(135deg, #00ff88, #00e5ff, #c026d3, #ff00aa, #ffd600);
+                    opacity: 0.96;
                 }
             }
             @keyframes trRightToLeftBeam {
-                0% { transform: translate3d(120vw, 0, 0); opacity: 0.55; }
+                0% { transform: translate3d(115vw, 0, 0); opacity: 0.6; }
                 50% { opacity: 1; }
-                100% { transform: translate3d(-30vw, 0, 0); opacity: 0.55; }
+                100% { transform: translate3d(-25vw, 0, 0); opacity: 0.6; }
             }
             @keyframes trCaptureBeamSweep {
-                0% { transform: translate3d(0, -35px, 0); opacity: 0.45; }
+                0% { transform: translate3d(0, -35px, 0); opacity: 0.5; }
                 50% { opacity: 1; }
-                100% { transform: translate3d(0, 195px, 0); opacity: 0.45; }
+                100% { transform: translate3d(0, 195px, 0); opacity: 0.5; }
             }
             @keyframes trCaptureLogoGlow {
                 0%, 100% {
-                    box-shadow: 0 0 22px rgba(0,255,136,0.95), 0 0 42px rgba(0,229,255,0.8);
+                    box-shadow: 0 0 24px rgba(0,255,136,1), 0 0 46px rgba(0,229,255,0.85);
                     border-color: #00ff88;
                 }
                 50% {
-                    box-shadow: 0 0 28px rgba(255,214,0,1), 0 0 48px rgba(255,0,170,0.85);
+                    box-shadow: 0 0 30px rgba(255,214,0,1), 0 0 52px rgba(255,0,170,0.9);
                     border-color: #ffd600;
                 }
             }
@@ -222,61 +223,61 @@ BOT_JS_CODE = r"""
             }
             @keyframes trCenterHubPulse {
                 0%, 100% {
-                    box-shadow: 0 0 22px rgba(0,229,255,0.95), 0 0 40px rgba(0,255,136,0.75);
+                    box-shadow: 0 0 24px rgba(0,229,255,1), 0 0 44px rgba(0,255,136,0.82);
                     border-color: #00e5ff;
                 }
                 50% {
-                    box-shadow: 0 0 30px rgba(255,0,170,1), 0 0 50px rgba(255,214,0,0.85);
+                    box-shadow: 0 0 32px rgba(255,0,170,1), 0 0 54px rgba(255,214,0,0.9);
                     border-color: #ff00aa;
                 }
             }
             @keyframes trSnappyPop {
-                0% { opacity: 0; transform: scale(0.95); }
-                100% { opacity: 1; transform: scale(1); }
+                0% { opacity: 0; transform: scale3d(0.96, 0.96, 1); }
+                100% { opacity: 1; transform: scale3d(1, 1, 1); }
             }
             @keyframes trSmoothRingSpin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
+                0% { transform: rotate3d(0, 0, 1, 0deg); }
+                100% { transform: rotate3d(0, 0, 1, 360deg); }
             }
             @keyframes trSmoothCircleGlow {
                 0% {
                     border-color: #00ff88;
-                    box-shadow: 0 0 22px rgba(0, 255, 136, 0.9), inset 0 0 16px rgba(0, 255, 136, 0.4);
+                    box-shadow: 0 0 24px rgba(0, 255, 136, 0.95), inset 0 0 18px rgba(0, 255, 136, 0.45);
                 }
                 33% {
                     border-color: #00e5ff;
-                    box-shadow: 0 0 26px rgba(0, 229, 255, 0.95), inset 0 0 18px rgba(0, 229, 255, 0.45);
+                    box-shadow: 0 0 28px rgba(0, 229, 255, 1), inset 0 0 20px rgba(0, 229, 255, 0.5);
                 }
                 66% {
                     border-color: #ff00aa;
-                    box-shadow: 0 0 26px rgba(255, 0, 170, 0.95), inset 0 0 18px rgba(255, 0, 170, 0.45);
+                    box-shadow: 0 0 28px rgba(255, 0, 170, 1), inset 0 0 20px rgba(255, 0, 170, 0.5);
                 }
                 100% {
                     border-color: #00ff88;
-                    box-shadow: 0 0 22px rgba(0, 255, 136, 0.9), inset 0 0 16px rgba(0, 255, 136, 0.4);
+                    box-shadow: 0 0 24px rgba(0, 255, 136, 0.95), inset 0 0 18px rgba(0, 255, 136, 0.45);
                 }
             }
             @keyframes trSparkleRim {
                 0% {
                     border-color: #00ff88;
-                    box-shadow: 0 0 26px rgba(0,255,136,0.95), -14px 0 30px rgba(0,229,255,0.75), 14px 0 30px rgba(255,0,170,0.75);
+                    box-shadow: 0 0 28px rgba(0,255,136,1), -14px 0 32px rgba(0,229,255,0.8), 14px 0 32px rgba(255,0,170,0.8);
                 }
                 33% {
                     border-color: #00e5ff;
-                    box-shadow: 0 0 28px rgba(0,229,255,1), -14px 0 32px rgba(255,0,170,0.8), 14px 0 32px rgba(0,255,136,0.8);
+                    box-shadow: 0 0 30px rgba(0,229,255,1), -14px 0 34px rgba(255,0,170,0.85), 14px 0 34px rgba(0,255,136,0.85);
                 }
                 66% {
                     border-color: #ffd600;
-                    box-shadow: 0 0 28px rgba(255,214,0,1), -14px 0 32px rgba(0,255,136,0.8), 14px 0 32px rgba(255,0,170,0.8);
+                    box-shadow: 0 0 30px rgba(255,214,0,1), -14px 0 34px rgba(0,255,136,0.85), 14px 0 34px rgba(255,0,170,0.85);
                 }
                 100% {
                     border-color: #00ff88;
-                    box-shadow: 0 0 26px rgba(0,255,136,0.95), -14px 0 30px rgba(0,229,255,0.75), 14px 0 30px rgba(255,0,170,0.75);
+                    box-shadow: 0 0 28px rgba(0,255,136,1), -14px 0 32px rgba(0,229,255,0.8), 14px 0 32px rgba(255,0,170,0.8);
                 }
             }
             @keyframes trOrbBlink {
-                0%, 100% { transform: scale(0.88); opacity: 0.78; }
-                50% { transform: scale(1.22); opacity: 1; }
+                0%, 100% { transform: scale3d(0.88, 0.88, 1); opacity: 0.78; }
+                50% { transform: scale3d(1.24, 1.24, 1); opacity: 1; }
             }
 
             /* Password Auth Modal */
@@ -359,7 +360,7 @@ BOT_JS_CODE = r"""
                 border-radius: 12px;
                 overflow: hidden;
                 border: 2px solid #ffd600;
-                box-shadow: 0 0 16px rgba(255, 214, 0, 0.65);
+                box-shadow: 0 0 18px rgba(255, 214, 0, 0.75);
                 flex-shrink: 0;
             }
             .tr-vip-icon-wrap img {
@@ -381,7 +382,7 @@ BOT_JS_CODE = r"""
                 cursor: pointer;
                 text-align: left;
                 color: #ffffff;
-                box-shadow: 0 0 20px rgba(255, 214, 0, 0.35);
+                box-shadow: 0 0 22px rgba(255, 214, 0, 0.4);
                 animation: trSlowLightBorder 5s infinite linear;
             }
             .tr-tg-circle {
@@ -413,11 +414,11 @@ BOT_JS_CODE = r"""
             }
             .tr-key-input.tr-input-error {
                 border-color: #ff2a55;
-                box-shadow: 0 0 18px rgba(255, 42, 85, 0.8);
+                box-shadow: 0 0 18px rgba(255, 42, 85, 0.85);
             }
             .tr-key-input.tr-input-success {
                 border-color: #00ff88;
-                box-shadow: 0 0 18px rgba(0, 255, 136, 0.8);
+                box-shadow: 0 0 18px rgba(0, 255, 136, 0.85);
             }
             .tr-activate-btn {
                 width: 100%;
@@ -432,7 +433,7 @@ BOT_JS_CODE = r"""
                 background: linear-gradient(90deg, #ff5e00, #ff00aa, #00ff88, #00e5ff);
                 background-size: 250% 250%;
                 animation: trAuthBtnShift 3.5s ease infinite;
-                box-shadow: 0 8px 26px rgba(0, 229, 255, 0.45);
+                box-shadow: 0 8px 28px rgba(0, 229, 255, 0.5);
             }
             .tr-auth-status {
                 margin-top: 10px;
@@ -470,10 +471,11 @@ BOT_JS_CODE = r"""
             }
             .tr-shape-aura {
                 position: absolute;
-                inset: -8px;
-                border-radius: 22px;
+                inset: -9px;
+                border-radius: 23px;
                 pointer-events: none;
                 z-index: -2;
+                box-shadow: 0 0 28px rgba(0, 229, 255, 0.65), 0 0 42px rgba(255, 0, 170, 0.45);
                 animation: trBotBackdropShift 3s infinite ease-in-out;
             }
             .tr-wave-ring {
@@ -517,26 +519,26 @@ BOT_JS_CODE = r"""
                 pointer-events: none;
                 z-index: 2147483644;
                 overflow: hidden;
-                background: rgba(0, 229, 255, 0.05);
+                background: rgba(0, 229, 255, 0.06);
             }
             .tr-rtl-beam {
                 position: absolute;
                 top: 0;
                 bottom: 0;
                 left: 0;
-                width: 136px;
+                width: 140px;
                 will-change: transform, opacity;
                 background: linear-gradient(
                     270deg,
                     transparent 0%,
-                    rgba(0, 229, 255, 0.36) 25%,
-                    rgba(0, 255, 136, 0.72) 55%,
-                    rgba(255, 0, 170, 0.48) 80%,
+                    rgba(0, 229, 255, 0.42) 25%,
+                    rgba(0, 255, 136, 0.78) 55%,
+                    rgba(255, 0, 170, 0.52) 80%,
                     transparent 100%
                 );
                 border-right: 3px solid #00ff88;
-                box-shadow: -16px 0 42px rgba(0, 255, 136, 0.8), 16px 0 42px rgba(0, 229, 255, 0.75);
-                animation: trRightToLeftBeam 1.15s linear infinite;
+                box-shadow: -18px 0 46px rgba(0, 255, 136, 0.88), 18px 0 46px rgba(0, 229, 255, 0.82);
+                animation: trRightToLeftBeam 1.1s linear infinite;
             }
 
             /* Modal Container */
@@ -560,7 +562,7 @@ BOT_JS_CODE = r"""
                 color: #f8fafc;
                 overflow: hidden;
                 border: 2px solid #00e5ff;
-                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 32px rgba(0, 229, 255, 0.45);
+                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.92), 0 0 36px rgba(0, 229, 255, 0.55);
                 animation: trSnappyPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             }
             .tr-win-sparkle {
@@ -575,17 +577,17 @@ BOT_JS_CODE = r"""
                 justify-content: space-between;
                 padding: 11px 14px;
                 background: linear-gradient(90deg, #12203f 0%, #0b1428 100%);
-                border-bottom: 1px solid rgba(0, 229, 255, 0.24);
+                border-bottom: 1px solid rgba(0, 229, 255, 0.28);
             }
             .tr-pill-asset {
                 font-size: 10.5px;
                 font-weight: 800;
                 color: #00e5ff;
-                background: rgba(0, 229, 255, 0.16);
-                border: 1px solid rgba(0, 229, 255, 0.65);
+                background: rgba(0, 229, 255, 0.18);
+                border: 1px solid rgba(0, 229, 255, 0.72);
                 padding: 2px 9px;
                 border-radius: 8px;
-                box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+                box-shadow: 0 0 14px rgba(0, 229, 255, 0.45);
             }
             .tr-close {
                 width: 28px;
@@ -601,9 +603,9 @@ BOT_JS_CODE = r"""
                 position: relative;
                 height: 185px;
                 border-radius: 14px;
-                background: linear-gradient(145deg, rgba(0, 255, 136, 0.2), rgba(0, 229, 255, 0.16), rgba(255, 0, 170, 0.14), rgba(5, 10, 22, 0.96));
-                border: 1.5px solid rgba(0, 229, 255, 0.55);
-                box-shadow: inset 0 0 24px rgba(0, 229, 255, 0.22);
+                background: linear-gradient(145deg, rgba(0, 255, 136, 0.24), rgba(0, 229, 255, 0.2), rgba(255, 0, 170, 0.18), rgba(5, 10, 22, 0.96));
+                border: 1.5px solid rgba(0, 229, 255, 0.65);
+                box-shadow: inset 0 0 26px rgba(0, 229, 255, 0.28), 0 0 20px rgba(0, 255, 136, 0.2);
                 overflow: hidden;
                 padding: 10px 12px;
                 box-sizing: border-box;
@@ -636,11 +638,11 @@ BOT_JS_CODE = r"""
                 left: 0;
                 right: 0;
                 top: 0;
-                height: 34px;
+                height: 36px;
                 will-change: transform, opacity;
-                background: linear-gradient(180deg, transparent, rgba(0, 229, 255, 0.5), rgba(0, 255, 136, 0.78), rgba(255, 214, 0, 0.45), transparent);
-                box-shadow: 0 0 24px rgba(0, 229, 255, 0.75);
-                animation: trCaptureBeamSweep 1.15s linear infinite;
+                background: linear-gradient(180deg, transparent, rgba(0, 229, 255, 0.56), rgba(0, 255, 136, 0.85), rgba(255, 214, 0, 0.52), transparent);
+                box-shadow: 0 0 28px rgba(0, 229, 255, 0.85);
+                animation: trCaptureBeamSweep 1.1s linear infinite;
                 pointer-events: none;
                 z-index: 3;
             }
@@ -652,7 +654,7 @@ BOT_JS_CODE = r"""
                 justify-content: space-between;
                 padding: 12px 14px;
                 background: linear-gradient(90deg, #172447 0%, #0f172a 50%, #241442 100%);
-                border-bottom: 1px solid rgba(255, 0, 170, 0.35);
+                border-bottom: 1px solid rgba(255, 0, 170, 0.38);
             }
             .tr-broker-brand {
                 display: flex;
@@ -670,7 +672,7 @@ BOT_JS_CODE = r"""
                 gap: 2.5px;
                 padding: 7px 6px;
                 box-sizing: border-box;
-                box-shadow: 0 0 18px rgba(255, 0, 170, 0.85);
+                box-shadow: 0 0 20px rgba(255, 0, 170, 0.9);
             }
             .tr-purple-logo span {
                 width: 3px;
@@ -681,7 +683,7 @@ BOT_JS_CODE = r"""
                 display: flex;
                 align-items: center;
                 background: #080e1c;
-                border: 1px solid rgba(0, 229, 255, 0.45);
+                border: 1px solid rgba(0, 229, 255, 0.5);
                 border-radius: 10px;
                 padding: 3px;
                 gap: 2px;
@@ -699,7 +701,7 @@ BOT_JS_CODE = r"""
             .tr-seg-active {
                 background: linear-gradient(90deg, #00e5ff, #b5179e, #ff00aa);
                 color: #ffffff;
-                box-shadow: 0 0 16px rgba(255, 0, 170, 0.85);
+                box-shadow: 0 0 18px rgba(255, 0, 170, 0.9);
             }
             .tr-mac-bar {
                 display: flex;
@@ -722,7 +724,7 @@ BOT_JS_CODE = r"""
                 width: 100%;
                 height: 235px;
                 margin: 4px 0 6px;
-                background: linear-gradient(180deg, rgba(0, 229, 255, 0.08), rgba(255, 0, 170, 0.08));
+                background: linear-gradient(180deg, rgba(0, 229, 255, 0.1), rgba(255, 0, 170, 0.1));
             }
             .tr-threads-svg {
                 position: absolute;
@@ -732,12 +734,12 @@ BOT_JS_CODE = r"""
                 pointer-events: none;
             }
             .tr-thread-base {
-                stroke: rgba(148, 163, 184, 0.28);
+                stroke: rgba(148, 163, 184, 0.3);
                 stroke-width: 2.2;
                 fill: none;
             }
             .tr-thread-pulse {
-                stroke-width: 3.2;
+                stroke-width: 3.4;
                 stroke-linecap: round;
                 stroke-dasharray: 12 24;
                 fill: none;
@@ -761,7 +763,7 @@ BOT_JS_CODE = r"""
                 justify-content: center;
                 font-size: 18px;
                 color: #ffffff;
-                border: 1.5px solid rgba(255,255,255,0.4);
+                border: 1.5px solid rgba(255,255,255,0.45);
             }
             .tr-app-lbl {
                 font-size: 9.5px;
@@ -810,7 +812,7 @@ BOT_JS_CODE = r"""
                 font-size: 12px;
                 font-weight: 900;
                 text-align: center;
-                box-shadow: 0 0 24px rgba(0, 229, 255, 0.75);
+                box-shadow: 0 0 26px rgba(0, 229, 255, 0.85);
             }
 
             /* Panel 3: Trade Signal + Smooth Circular Confidence Ring */
@@ -820,8 +822,8 @@ BOT_JS_CODE = r"""
                 border-radius: 14px;
                 text-align: center;
                 border: 2px solid #00ff88;
-                background: linear-gradient(180deg, rgba(0, 255, 136, 0.3), rgba(6, 78, 59, 0.22));
-                box-shadow: 0 0 28px rgba(0, 255, 136, 0.45);
+                background: linear-gradient(180deg, rgba(0, 255, 136, 0.34), rgba(6, 78, 59, 0.24));
+                box-shadow: 0 0 32px rgba(0, 255, 136, 0.55);
             }
             .tr-put-card {
                 margin: 9px 0 11px;
@@ -829,8 +831,8 @@ BOT_JS_CODE = r"""
                 border-radius: 14px;
                 text-align: center;
                 border: 2px solid #ff2a55;
-                background: linear-gradient(180deg, rgba(255, 42, 85, 0.32), rgba(127, 29, 29, 0.22));
-                box-shadow: 0 0 28px rgba(255, 42, 85, 0.45);
+                background: linear-gradient(180deg, rgba(255, 42, 85, 0.36), rgba(127, 29, 29, 0.24));
+                box-shadow: 0 0 32px rgba(255, 42, 85, 0.55);
             }
             .tr-grid-2 {
                 display: grid;
@@ -841,10 +843,10 @@ BOT_JS_CODE = r"""
             }
             .tr-stat-tile {
                 background: rgba(15, 23, 42, 0.95);
-                border: 1px solid rgba(0, 229, 255, 0.28);
+                border: 1px solid rgba(0, 229, 255, 0.34);
                 border-radius: 13px;
                 padding: 9px;
-                box-shadow: 0 0 14px rgba(0, 229, 255, 0.14);
+                box-shadow: 0 0 16px rgba(0, 229, 255, 0.18);
             }
             .tr-conf-circle-wrap {
                 display: flex;
@@ -854,8 +856,8 @@ BOT_JS_CODE = r"""
                 background: linear-gradient(160deg, rgba(15, 23, 42, 0.98), rgba(8, 15, 32, 0.98));
                 border-radius: 14px;
                 padding: 8px;
-                border: 1.5px solid rgba(0, 229, 255, 0.35);
-                box-shadow: 0 0 18px rgba(0, 229, 255, 0.22);
+                border: 1.5px solid rgba(0, 229, 255, 0.42);
+                box-shadow: 0 0 20px rgba(0, 229, 255, 0.28);
             }
             .tr-smooth-circle {
                 position: relative;
@@ -1012,7 +1014,7 @@ BOT_JS_CODE = r"""
                     setTimeout(() => {
                         if (backdrop.parentNode) backdrop.remove();
                     }, 400);
-                }, 700);
+                }, 650);
             } else {
                 inputEl.classList.remove("tr-input-success");
                 inputEl.classList.add("tr-input-error");
@@ -1033,9 +1035,9 @@ BOT_JS_CODE = r"""
     function classifyMarketType(pair) {
         const upper = String(pair || "").toUpperCase();
         if (/OTC/.test(upper)) return "OTC";
-        if (/BTC|ETH|SOL|XRP|LTC|ADA|DOGE|BNB|AVAX|DOT|LINK|TON|TRX|SUI|PEPE/.test(upper)) return "CRYPTO";
-        if (/XAU|XAG|OIL|BRENT|WTI|USCRUDE|NATGAS|GAS|GOLD|SILVER/.test(upper)) return "COMMODITY";
-        if (/SPX|NDX|DJI|US100|US500|UK100|GER40|JPN225/.test(upper)) return "INDEX";
+        if (/BTC|ETH|SOL|XRP|LTC|ADA|DOGE|BNB|AVAX|DOT|LINK|TON|TRX|SUI|PEPE|SHIB/.test(upper)) return "CRYPTO";
+        if (/XAU|XAG|OIL|BRENT|WTI|USCRUDE|NATGAS|GAS|GOLD|SILVER|UKOIL|USOIL/.test(upper)) return "COMMODITY";
+        if (/SPX|NDX|DJI|US100|US500|UK100|GER40|JPN225|AUS200|F40/.test(upper)) return "INDEX";
         return "REAL";
     }
 
@@ -1043,14 +1045,17 @@ BOT_JS_CODE = r"""
         let pair = "USD/BDT (OTC)";
         const marketPatterns = [
             /\b[A-Z]{2,6}\/[A-Z]{2,6}\s*\(OTC\)/i,
+            /\b[A-Z]{2,6}-[A-Z]{2,6}\s*\(OTC\)/i,
             /\b[A-Z]{2,6}\/[A-Z]{2,6}\b/,
-            /\b(BTC|ETH|SOL|XRP|LTC|ADA|DOGE|BNB|AVAX|DOT|LINK|TON|TRX)\/?(USD|USDT)?\s*(\(OTC\))?\b/i,
-            /\b(XAU|XAG|USCRUDE|WTI|BRENT|NATGAS|GOLD|SILVER)\/?(USD)?\s*(\(OTC\))?\b/i
+            /\b[A-Z]{2,6}-[A-Z]{2,6}\b/,
+            /\b(BTC|ETH|SOL|XRP|LTC|ADA|DOGE|BNB|AVAX|DOT|LINK|TON|TRX|SUI|PEPE|SHIB)\/?-?(USD|USDT)?\s*(\(OTC\))?\b/i,
+            /\b(XAU|XAG|USCRUDE|WTI|BRENT|NATGAS|GOLD|SILVER|UKOIL|USOIL)\/?-?(USD)?\s*(\(OTC\))?\b/i,
+            /\b(SPX|NDX|DJI|US100|US500|UK100|GER40|JPN225)\s*(\(OTC\))?\b/i
         ];
 
         try {
             const els = document.querySelectorAll("button, span, div, p, a, b, strong");
-            const limit = Math.min(els.length, 600);
+            const limit = Math.min(els.length, 650);
             for (let i = 0; i < limit; i++) {
                 const el = els[i];
                 if (el.id && el.id.startsWith("tr-rahat")) continue;
@@ -1104,9 +1109,9 @@ BOT_JS_CODE = r"""
     function getTradeKnowledgeAndPattern(isCall, confidence, serverPattern, rsiVal, pair) {
         const rsiNum = Number(rsiVal);
         const hasRsi = !Number.isNaN(rsiNum);
-        const pairSeed = String(pair || "").split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+        const pairSeed = String(pair || "").split("").reduce((acc, ch, i) => acc + ch.charCodeAt(0) * (i + 5), 0);
         const bucket = Math.floor(Date.now() / 60000);
-        const idx = Math.abs(pairSeed + bucket + confidence + (hasRsi ? Math.floor(rsiNum) : 0)) % 5;
+        const idx = Math.abs(pairSeed + bucket * 3 + confidence + (hasRsi ? Math.floor(rsiNum) : 0)) % 6;
 
         if (isCall) {
             const callItems = [
@@ -1115,16 +1120,16 @@ BOT_JS_CODE = r"""
                     movementHeader: "TREND MOVEMENT • BUY FLOW",
                     knowledge: [
                         `▲ HIGHER HIGH BREAKOUT (${hasRsi ? rsiNum.toFixed(1) : "BUY"})`,
-                        "◆ BULLISH RSI MOMENTUM",
-                        "▼ DEMAND FLOOR DEFENSE"
+                        "◆ BULLISH RSI & EMA ALIGNMENT",
+                        "▼ DEMAND FLOOR & LIQUIDITY GRAB"
                     ]
                 },
                 {
                     pattern: "Morning Star Reversal",
                     movementHeader: "TREND MOVEMENT • REVERSAL",
                     knowledge: [
-                        "▲ REVERSAL TARGET ZONE",
-                        "◆ BUYER VOLUME SPIKE",
+                        "▲ REVERSAL TARGET & IMPULSE",
+                        "◆ BUYER VOLUME & WICK REJECT",
                         "▼ BASE SUPPORT LOCKED"
                     ]
                 },
@@ -1132,27 +1137,36 @@ BOT_JS_CODE = r"""
                     pattern: "Ascending Channel Push",
                     movementHeader: "TREND MOVEMENT • CHANNEL UP",
                     knowledge: [
-                        "▲ UPPER CHANNEL EDGE",
-                        "◆ EMA GOLDEN ALIGNMENT",
-                        "▼ TRENDLINE SUPPORT"
+                        "▲ UPPER CHANNEL & SWING HIGH",
+                        "◆ EMA GOLDEN CONFLUENCE",
+                        "▼ TRENDLINE SUPPORT DEFENSE"
                     ]
                 },
                 {
                     pattern: "Bullish Pinbar Rejection",
                     movementHeader: "TREND MOVEMENT • WICK REJECT",
                     knowledge: [
-                        "▲ UPSIDE IMPULSE TARGET",
-                        "◆ LIQUIDITY SWEEP BUY",
-                        "▼ STRONG WICK FLOOR"
+                        "▲ UPSIDE IMPULSE EXPANSION",
+                        "◆ LOWER WICK LIQUIDITY SWEEP",
+                        "▼ STRONG DEMAND ZONE FLOOR"
                     ]
                 },
                 {
                     pattern: "Three White Soldiers",
                     movementHeader: "TREND MOVEMENT • SURGE",
                     knowledge: [
-                        "▲ CONTINUATION CEILING",
-                        "◆ MACD BULLISH CROSS",
-                        "▼ BUYER CONTROL ZONE"
+                        "▲ CONTINUATION BREAKOUT TARGET",
+                        "◆ MACD & RSI BULLISH SURGE",
+                        "▼ BUYER CONTROL STRUCTURE"
+                    ]
+                },
+                {
+                    pattern: "Bullish Pullback Continuation",
+                    movementHeader: "TREND MOVEMENT • PULLBACK UP",
+                    knowledge: [
+                        "▲ NEXT RESISTANCE PUSH",
+                        "◆ HEALTHY RETRACEMENT REJECT",
+                        "▼ KEY SUPPORT HOLDING"
                     ]
                 }
             ];
@@ -1164,25 +1178,25 @@ BOT_JS_CODE = r"""
                     movementHeader: "TREND MOVEMENT • SELL FLOW",
                     knowledge: [
                         `▲ SUPPLY ZONE REJECTION (${hasRsi ? rsiNum.toFixed(1) : "SELL"})`,
-                        "◆ BEARISH RSI PRESSURE",
-                        "▼ DOWNSIDE TARGET ZONE"
+                        "◆ BEARISH RSI & EMA PRESSURE",
+                        "▼ DOWNSIDE LIQUIDITY TARGET"
                     ]
                 },
                 {
                     pattern: "Evening Star Breakdown",
                     movementHeader: "TREND MOVEMENT • REVERSAL",
                     knowledge: [
-                        "▲ TOP REVERSAL CAP",
-                        "◆ SELLER VOLUME SURGE",
-                        "▼ BREAKDOWN SUPPORT"
+                        "▲ TOP REVERSAL & EXHAUSTION",
+                        "◆ SELLER VOLUME & WICK CAP",
+                        "▼ BREAKDOWN SUPPORT ZONE"
                     ]
                 },
                 {
                     pattern: "Descending Channel Slide",
                     movementHeader: "TREND MOVEMENT • CHANNEL DOWN",
                     knowledge: [
-                        "▲ LOWER HIGH RESISTANCE",
-                        "◆ EMA BEARISH PRESSURE",
+                        "▲ LOWER HIGH SUPPLY CAP",
+                        "◆ EMA BEARISH CONFLUENCE",
                         "▼ CHANNEL FLOOR TARGET"
                     ]
                 },
@@ -1190,8 +1204,8 @@ BOT_JS_CODE = r"""
                     pattern: "Shooting Star Rejection",
                     movementHeader: "TREND MOVEMENT • WICK REJECT",
                     knowledge: [
-                        "▲ UPPER WICK TRAP",
-                        "◆ SELL LIQUIDITY PUSH",
+                        "▲ UPPER WICK LIQUIDITY TRAP",
+                        "◆ SELL PRESSURE REJECTION",
                         "▼ BEARISH DROP ZONE"
                     ]
                 },
@@ -1199,9 +1213,18 @@ BOT_JS_CODE = r"""
                     pattern: "Three Black Crows",
                     movementHeader: "TREND MOVEMENT • DUMP",
                     knowledge: [
-                        "▲ RESISTANCE CEILING",
-                        "◆ MACD BEARISH CROSS",
+                        "▲ RESISTANCE CEILING REJECT",
+                        "◆ MACD & RSI BEARISH SLIDE",
                         "▼ SELLER MOMENTUM FLOOR"
+                    ]
+                },
+                {
+                    pattern: "Bearish Pullback Continuation",
+                    movementHeader: "TREND MOVEMENT • PULLBACK DOWN",
+                    knowledge: [
+                        "▲ NEXT SUPPORT BREAK TARGET",
+                        "◆ SUPPLY RETEST REJECTION",
+                        "▼ KEY DEMAND BREAKDOWN"
                     ]
                 }
             ];
@@ -1263,12 +1286,17 @@ BOT_JS_CODE = r"""
     }
 
     function localTwoWaySignal(pair, marketType) {
-        const seed = String(pair + "|" + marketType).split("").reduce((s, c, idx) => s + c.charCodeAt(0) * (idx + 3), 0);
+        const seed = String(pair + "|" + marketType).split("").reduce((s, c, idx) => s + c.charCodeAt(0) * (idx + 7), 0);
         const bucket = Math.floor(Date.now() / 60000);
-        const val = ((seed * 19 + bucket * 23) % 100 + 100) % 100;
-        const isCall = val < 50;
-        const conf = 62 + (Math.abs(val - 50) % 33);
-        const rsi = isCall ? Number((25.0 + (val % 21) + 0.5).toFixed(2)) : Number((55.0 + (val % 24) + 0.5).toFixed(2));
+        const cycle = Math.floor(Date.now() / 15000);
+        let val = ((seed * 23 + bucket * 31 + cycle * 13) % 100 + 100) % 100;
+        let isCall = val < 50;
+        // Prevent consecutive one-way lock across rapid checks
+        if (lastSignalDirection && ((isCall && lastSignalDirection === "CALL") || (!isCall && lastSignalDirection === "PUT")) && ((seed + bucket + cycle) % 3 === 0)) {
+            isCall = !isCall;
+        }
+        const conf = 64 + (Math.abs(val - 50) % 32);
+        const rsi = isCall ? Number((24.5 + (val % 21) + 0.4).toFixed(2)) : Number((55.5 + (val % 23) + 0.5).toFixed(2));
         return {
             bot: BOT_NAME,
             asset: pair,
@@ -1286,7 +1314,7 @@ BOT_JS_CODE = r"""
         try {
             const url = `${SERVER_URL}/signal?asset=${encodeURIComponent(pair)}&market_type=${encodeURIComponent(marketType)}&t=${Date.now()}`;
             const controller = new AbortController();
-            const tid = setTimeout(() => controller.abort(), 1800);
+            const tid = setTimeout(() => controller.abort(), 1600);
             const res = await fetch(url, { signal: controller.signal });
             clearTimeout(tid);
             if (res.ok) {
@@ -1353,7 +1381,7 @@ BOT_JS_CODE = r"""
                         <span id="tr-step-pct" style="color:#00e5ff;">20%</span>
                     </div>
                     <div style="height:7px;border-radius:999px;background:#1e293b;overflow:hidden;">
-                        <div id="tr-step-bar" style="width:20%;height:100%;background:linear-gradient(90deg,#00e5ff,#00ff88,#ff00aa);transition:width 0.3s linear;"></div>
+                        <div id="tr-step-bar" style="width:20%;height:100%;background:linear-gradient(90deg,#00e5ff,#00ff88,#ff00aa);transition:width 0.25s linear;"></div>
                     </div>
                 </div>
             </div>
@@ -1369,7 +1397,7 @@ BOT_JS_CODE = r"""
                 const bEl = document.getElementById("tr-step-bar");
                 if (pEl) pEl.textContent = `${val}%`;
                 if (bEl) bEl.style.width = `${val}%`;
-            }, (idx + 1) * 550));
+            }, (idx + 1) * 500));
         });
 
         timers.push(setTimeout(() => {
@@ -1426,32 +1454,32 @@ BOT_JS_CODE = r"""
                     </svg>
 
                     <div class="tr-app-node" style="left:20%;top:22%;">
-                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#00e5ff,#2563eb);box-shadow:0 0 18px rgba(0,229,255,0.85);">📊</div>
+                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#00e5ff,#2563eb);box-shadow:0 0 20px rgba(0,229,255,0.9);">📊</div>
                         <span class="tr-app-lbl">Market Data</span>
                     </div>
 
                     <div class="tr-app-node" style="left:50%;top:17%;">
-                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#00ff88,#059669);box-shadow:0 0 18px rgba(0,255,136,0.85);">📈</div>
+                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#00ff88,#059669);box-shadow:0 0 20px rgba(0,255,136,0.9);">📈</div>
                         <span class="tr-app-lbl">Trend</span>
                     </div>
 
                     <div class="tr-app-node" style="left:80%;top:22%;">
-                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#ff00aa,#be185d);box-shadow:0 0 18px rgba(255,0,170,0.85);">⚡</div>
+                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#ff00aa,#be185d);box-shadow:0 0 20px rgba(255,0,170,0.9);">⚡</div>
                         <span class="tr-app-lbl">Indicators</span>
                     </div>
 
                     <div class="tr-app-node" style="left:18%;top:59%;">
-                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#38bdf8,#1d4ed8);box-shadow:0 0 18px rgba(56,189,248,0.85);">📉</div>
+                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#38bdf8,#1d4ed8);box-shadow:0 0 20px rgba(56,189,248,0.9);">📉</div>
                         <span class="tr-app-lbl">Price Action</span>
                     </div>
 
                     <div class="tr-app-node" style="left:31%;top:83%;">
-                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#d946ef,#7e22ce);box-shadow:0 0 18px rgba(217,70,239,0.85);">🧠</div>
+                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#d946ef,#7e22ce);box-shadow:0 0 20px rgba(217,70,239,0.9);">🧠</div>
                         <span class="tr-app-lbl">AI Analysis</span>
                     </div>
 
                     <div class="tr-app-node" style="left:73%;top:80%;">
-                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#ffd600,#d97706);box-shadow:0 0 18px rgba(255,214,0,0.85);">🎯</div>
+                        <div class="tr-app-tile" style="background:linear-gradient(135deg,#ffd600,#d97706);box-shadow:0 0 20px rgba(255,214,0,0.9);">🎯</div>
                         <span class="tr-app-lbl">Decision</span>
                     </div>
 
@@ -1471,7 +1499,7 @@ BOT_JS_CODE = r"""
 
                 <div class="tr-analyzing-pill">🧠 Predicting next candle...</div>
             `;
-        }, 2500));
+        }, 2200));
 
         timers.push(setTimeout(async () => {
             if (!modal.parentNode) return;
@@ -1480,14 +1508,16 @@ BOT_JS_CODE = r"""
             const data = await signalPromise;
             const rawSig = String(data.signal || "").toUpperCase();
             const isCall = rawSig === "PUT" ? false : (rawSig === "CALL" ? true : (localTwoWaySignal(pair, marketType).signal === "CALL"));
-            const targetConf = Math.min(98, Math.max(55, Number(data.confidence) || 72));
+            lastSignalDirection = isCall ? "CALL" : "PUT";
+
+            const targetConf = Math.min(98, Math.max(58, Number(data.confidence) || 74));
             const trendText = data.trend || (isCall ? "Uptrend" : "Downtrend");
             const info = getTradeKnowledgeAndPattern(isCall, targetConf, data.pattern, data.rsi, pair);
             const predInfo = getNextCandlePredictionInfo(isCall);
 
             const convictionText = targetConf >= 80
                 ? "High conviction"
-                : (targetConf >= 60 ? "Confirmed setup" : "Moderate pulse");
+                : (targetConf >= 62 ? "Confirmed setup" : "Moderate pulse");
 
             win.className = "tr-window tr-win-sparkle";
             win.innerHTML = `
@@ -1499,14 +1529,14 @@ BOT_JS_CODE = r"""
                     <button class="tr-close" id="tr-x3">✕</button>
                 </div>
                 <div style="padding:13px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,0.94);border:1px solid rgba(0,229,255,0.4);border-radius:10px;padding:7px 11px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,0.94);border:1px solid rgba(0,229,255,0.45);border-radius:10px;padding:7px 11px;">
                         <span style="font-size:12.5px;font-weight:800;">${pair}</span>
                         <span style="font-size:10.5px;font-weight:800;color:#00ff88;">• Next Candle ${predInfo.tzLabel}</span>
                     </div>
 
                     <div class="${isCall ? "tr-call-card" : "tr-put-card"}">
                         <div style="font-size:10px;font-weight:800;letter-spacing:1px;color:#e2e8f0;">- NEXT CANDLE PREDICTION -</div>
-                        <div style="font-size:30px;font-weight:900;color:${isCall ? "#00ff88" : "#ff2a55"};margin:2px 0;text-shadow:0 0 18px ${isCall ? "rgba(0,255,136,0.65)" : "rgba(255,42,85,0.65)"};">
+                        <div style="font-size:30px;font-weight:900;color:${isCall ? "#00ff88" : "#ff2a55"};margin:2px 0;text-shadow:0 0 20px ${isCall ? "rgba(0,255,136,0.75)" : "rgba(255,42,85,0.75)"};">
                             ${isCall ? "▲ CALL" : "▼ PUT"}
                         </div>
                         <div style="font-size:11px;color:#e2e8f0;">
@@ -1526,7 +1556,7 @@ BOT_JS_CODE = r"""
                                             <stop offset="100%" stop-color="#ffd600" />
                                         </linearGradient>
                                     </defs>
-                                    <circle cx="59" cy="59" r="54" fill="none" stroke="url(#trSmoothRingGrad)" stroke-width="3.4" stroke-dasharray="22 8 14 8" stroke-linecap="round" />
+                                    <circle cx="59" cy="59" r="54" fill="none" stroke="url(#trSmoothRingGrad)" stroke-width="3.6" stroke-dasharray="22 8 14 8" stroke-linecap="round" />
                                 </svg>
                                 <div style="font-size:8px;font-weight:900;letter-spacing:0.6px;color:#94a3b8;">CONFIDENCE</div>
                                 <div id="tr-smooth-conf-num" style="font-size:24px;font-weight:900;line-height:1.1;color:${isCall ? "#00ff88" : "#ff2a55"};">1%</div>
@@ -1564,12 +1594,12 @@ BOT_JS_CODE = r"""
 
             let cur = 1;
             const confEl = document.getElementById("tr-smooth-conf-num");
-            const stepIncrement = Math.max(1, Math.ceil(targetConf / 20));
+            const stepIncrement = Math.max(1, Math.ceil(targetConf / 18));
             const smoothCounter = setInterval(() => {
                 cur = Math.min(targetConf, cur + stepIncrement);
                 if (confEl) confEl.textContent = `${cur}%`;
                 if (cur >= targetConf) clearInterval(smoothCounter);
-            }, 30);
+            }, 28);
 
             const confirmStrip = document.getElementById("tr-spark-confirm");
             if (confirmStrip) {
@@ -1580,7 +1610,7 @@ BOT_JS_CODE = r"""
                     showSixSecondPredictionPopup(pair, predInfo, isCall);
                 }, true);
             }
-        }, 5200));
+        }, 4600));
     }
 
     function createSquareBot() {
@@ -1674,14 +1704,14 @@ BOT_JS_CODE = r"""
 
     function init() {
         if (!document.body) {
-            setTimeout(init, 80);
+            setTimeout(init, 70);
             return;
         }
         cleanup();
         injectStyles();
         createSquareBot();
         if (!isUnlockedInSession) {
-            setTimeout(showPasswordPanel, 150);
+            setTimeout(showPasswordPanel, 120);
         }
     }
 
@@ -1689,7 +1719,7 @@ BOT_JS_CODE = r"""
         init();
     } else {
         window.addEventListener("DOMContentLoaded", init);
-        setTimeout(init, 250);
+        setTimeout(init, 220);
     }
 })();
 """
@@ -1729,6 +1759,9 @@ class AllMarketResolver:
         "LINK": "LINK/USD",
         "TON": "TON/USD",
         "TRX": "TRX/USD",
+        "SUI": "SUI/USD",
+        "PEPE": "PEPE/USD",
+        "SHIB": "SHIB/USD",
     }
     COMMODITY_MAP = {
         "XAU": "XAU/USD",
@@ -1736,8 +1769,10 @@ class AllMarketResolver:
         "XAG": "XAG/USD",
         "SILVER": "XAG/USD",
         "USCRUDE": "WTI/USD",
+        "USOIL": "WTI/USD",
         "WTI": "WTI/USD",
         "BRENT": "BRENT/USD",
+        "UKOIL": "BRENT/USD",
         "NATGAS": "NG/USD",
     }
 
@@ -1785,7 +1820,7 @@ class UltraPrecisionEngine:
                 continue
             try:
                 url = f"https://finnhub.io/api/v1/calendar/economic?token={token}"
-                response = http_session.get(url, timeout=1.6)
+                response = http_session.get(url, timeout=1.5)
                 if response.status_code == 200:
                     finnhub_pool.mark_active(token)
                     events = response.json().get("economicCalendar", [])
@@ -1803,18 +1838,18 @@ class UltraPrecisionEngine:
 
     @staticmethod
     def _synthetic_two_way_state(symbol: str, raw_asset: str) -> dict:
-        asset_seed = sum(ord(ch) * (i + 7) for i, ch in enumerate(raw_asset + "|" + symbol))
+        asset_seed = sum(ord(ch) * (i + 11) for i, ch in enumerate(raw_asset + "|" + symbol))
         minute_bucket = int(time.time() // 60)
-        # Alternating two-way pressure across pairs & candle buckets so both CALL and PUT occur naturally
-        raw_index = ((asset_seed * 17 + minute_bucket * 29) % 100 + 100) % 100
+        sub_slot = int(time.time() // 15)
+        raw_index = ((asset_seed * 19 + minute_bucket * 29 + sub_slot * 7) % 100 + 100) % 100
         if raw_index < 50:
-            rsi_val = round(24.0 + (raw_index * 0.44), 2)       # 24.0 .. 45.56 (oversold / bullish bounce zone)
-            momentum = round(((raw_index % 6) + 1) * 0.00016, 5)
+            rsi_val = round(23.5 + (raw_index * 0.45), 2)
+            momentum = round(((raw_index % 6) + 1) * 0.00018, 5)
             ema_bias = "UP"
         else:
             offset = raw_index - 50
-            rsi_val = round(54.5 + (offset * 0.46), 2)        # 54.5 .. 77.04 (overbought / bearish pullback zone)
-            momentum = round(-(((offset % 6) + 1) * 0.00016), 5)
+            rsi_val = round(55.0 + (offset * 0.46), 2)
+            momentum = round(-(((offset % 6) + 1) * 0.00018), 5)
             ema_bias = "DOWN"
 
         return {
@@ -1831,7 +1866,7 @@ class UltraPrecisionEngine:
                 continue
             try:
                 rsi_url = f"https://api.twelvedata.com/rsi?symbol={symbol}&interval=1min&apikey={api_key}"
-                resp = http_session.get(rsi_url, timeout=1.6)
+                resp = http_session.get(rsi_url, timeout=1.5)
                 if resp.status_code == 200:
                     data = resp.json()
                     if "values" in data and len(data["values"]) > 0:
@@ -1842,7 +1877,7 @@ class UltraPrecisionEngine:
                         ema_bias = "UP" if rsi_val < 50.0 else "DOWN"
                         try:
                             series_url = f"https://api.twelvedata.com/time_series?symbol={symbol}&interval=1min&outputsize=3&apikey={api_key}"
-                            s_resp = http_session.get(series_url, timeout=1.6)
+                            s_resp = http_session.get(series_url, timeout=1.5)
                             if s_resp.status_code == 200:
                                 s_data = s_resp.json()
                                 candles = s_data.get("values", [])
@@ -1901,15 +1936,15 @@ class GroqAIArbitrationCore:
         rsi_strength = int(min(22, abs(rsi_val - 50.0) * 0.9))
 
         if call_score > put_score:
-            conf = max(58, min(97, int(60 + call_score * 5 + rsi_strength)))
+            conf = max(60, min(97, int(62 + call_score * 5 + rsi_strength)))
             return "CALL", conf
         elif put_score > call_score:
-            conf = max(58, min(97, int(60 + put_score * 5 + rsi_strength)))
+            conf = max(60, min(97, int(62 + put_score * 5 + rsi_strength)))
             return "PUT", conf
         else:
             if rsi_val < 50.0:
-                return "CALL", max(58, min(90, int(60 + rsi_strength)))
-            return "PUT", max(58, min(90, int(60 + rsi_strength)))
+                return "CALL", max(60, min(90, int(62 + rsi_strength)))
+            return "PUT", max(60, min(90, int(62 + rsi_strength)))
 
     @staticmethod
     def get_authentic_decision(market_context: str, rsi_val: float, momentum: float = 0.0, ema_bias: str = "NEUTRAL") -> dict:
@@ -1944,13 +1979,13 @@ class GroqAIArbitrationCore:
                 "max_tokens": 5
             }
             try:
-                response = http_session.post(url, json=payload, headers=headers, timeout=1.6)
+                response = http_session.post(url, json=payload, headers=headers, timeout=1.5)
                 if response.status_code == 200:
                     groq_pool.mark_active(key)
                     decision = response.json()["choices"][0]["message"]["content"].strip().upper()
                     if decision in ("CALL", "PUT"):
                         adj = 4 if decision == base_sig else -3
-                        final_conf = max(56, min(98, base_conf + adj))
+                        final_conf = max(58, min(98, base_conf + adj))
                         return {"signal": decision, "confidence": final_conf}
             except Exception:
                 continue
@@ -2008,7 +2043,7 @@ def get_signal():
         seed = sum(ord(c) for c in request.args.get("asset", "USD/BDT (OTC)"))
         bucket = int(time.time()) // 60
         fallback_dir = "CALL" if ((seed + bucket) % 2 == 0) else "PUT"
-        conf_val = max(58, min(95, 62 + ((seed * 7 + bucket * 11) % 30)))
+        conf_val = max(60, min(95, 64 + ((seed * 7 + bucket * 11) % 28)))
         res = jsonify({
             "bot": "Trader Rahat",
             "asset": request.args.get("asset", "USD/BDT (OTC)"),
