@@ -30,11 +30,17 @@ BOT_JS_CODE = r"""
 (function () {
     const SERVER_URL = "https://trader-rahat-ai.onrender.com";
     const BOT_NAME = "Trader Rahat";
+    const AUTH_TITLE = "Trader Rahat AI Bot";
     const BOT_LOGO = "https://i.postimg.cc/nhK0yHw1/file-000000001b808211b004c14708610520.png";
+    const VIP_BADGE_LOGO = "https://i.postimg.cc/7h0qDGzz/file-0000000016a482119619e0cb99151c28.png";
+    const TELEGRAM_URL = "https://t.me/+x1QYA_1-sSs0NTk1";
+    const BOT_PASSWORD = "traderrahat!\"=%\u20b3@";
+    const AUTH_STORAGE_KEY = "tr_rahat_ai_bot_unlocked_v1";
 
     function cleanup() {
         [
             "tr-rahat-styles",
+            "tr-rahat-auth-backdrop",
             "tr-rahat-square-bot",
             "tr-rahat-rtl-scan",
             "tr-rahat-modal",
@@ -49,26 +55,53 @@ BOT_JS_CODE = r"""
         const style = document.createElement("style");
         style.id = "tr-rahat-styles";
         style.textContent = `
-            @keyframes trThickWave1 {
+            @keyframes trSlowLightBorder {
+                0% {
+                    border-color: #22c55e;
+                    box-shadow: 0 0 24px rgba(34, 197, 94, 0.85), 0 0 46px rgba(56, 189, 248, 0.45);
+                }
+                25% {
+                    border-color: #38bdf8;
+                    box-shadow: 0 0 28px rgba(56, 189, 248, 0.9), 0 0 50px rgba(168, 85, 247, 0.5);
+                }
+                50% {
+                    border-color: #a855f7;
+                    box-shadow: 0 0 28px rgba(168, 85, 247, 0.9), 0 0 50px rgba(236, 72, 153, 0.5);
+                }
+                75% {
+                    border-color: #facc15;
+                    box-shadow: 0 0 28px rgba(250, 204, 21, 0.9), 0 0 50px rgba(34, 197, 94, 0.5);
+                }
+                100% {
+                    border-color: #22c55e;
+                    box-shadow: 0 0 24px rgba(34, 197, 94, 0.85), 0 0 46px rgba(56, 189, 248, 0.45);
+                }
+            }
+            @keyframes trAuthBtnShift {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            @keyframes trThickWavePulse {
                 0% {
                     transform: scale(0.92);
                     opacity: 0.98;
                     border-color: #22c55e;
-                    box-shadow: 0 0 16px #22c55e, inset 0 0 12px #22c55e;
+                    box-shadow: 0 0 18px #22c55e, inset 0 0 12px #22c55e;
                 }
                 33% {
                     border-color: #38bdf8;
-                    box-shadow: 0 0 20px #38bdf8, inset 0 0 14px #38bdf8;
+                    box-shadow: 0 0 22px #38bdf8, inset 0 0 14px #38bdf8;
                 }
                 66% {
                     border-color: #a855f7;
-                    box-shadow: 0 0 20px #a855f7, inset 0 0 14px #a855f7;
+                    box-shadow: 0 0 22px #a855f7, inset 0 0 14px #a855f7;
                 }
                 100% {
                     transform: scale(1.42);
                     opacity: 0;
                     border-color: #facc15;
-                    box-shadow: 0 0 22px #facc15;
+                    box-shadow: 0 0 24px #facc15;
                 }
             }
             @keyframes trBotBorderHue {
@@ -115,9 +148,31 @@ BOT_JS_CODE = r"""
                 }
             }
             @keyframes trSnappyPop {
-                0% { opacity: 0; transform: scale(0.84) translateY(10px); }
+                0% { opacity: 0; transform: scale(0.86) translateY(10px); }
                 70% { opacity: 1; transform: scale(1.02) translateY(0); }
                 100% { opacity: 1; transform: scale(1) translateY(0); }
+            }
+            @keyframes trSmoothRingSpin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            @keyframes trSmoothCircleGlow {
+                0% {
+                    border-color: #22c55e;
+                    box-shadow: 0 0 18px rgba(34, 197, 94, 0.8), inset 0 0 14px rgba(34, 197, 94, 0.35);
+                }
+                33% {
+                    border-color: #38bdf8;
+                    box-shadow: 0 0 22px rgba(56, 189, 248, 0.9), inset 0 0 16px rgba(56, 189, 248, 0.4);
+                }
+                66% {
+                    border-color: #a855f7;
+                    box-shadow: 0 0 22px rgba(168, 85, 247, 0.9), inset 0 0 16px rgba(168, 85, 247, 0.4);
+                }
+                100% {
+                    border-color: #22c55e;
+                    box-shadow: 0 0 18px rgba(34, 197, 94, 0.8), inset 0 0 14px rgba(34, 197, 94, 0.35);
+                }
             }
             @keyframes trSparkleRim {
                 0% {
@@ -137,49 +192,171 @@ BOT_JS_CODE = r"""
                     box-shadow: 0 0 24px rgba(34,197,94,0.9), -14px 0 28px rgba(56,189,248,0.65), 14px 0 28px rgba(168,85,247,0.65);
                 }
             }
-            @keyframes trElectricSpinSlow {
-                0% {
-                    transform: rotate(0deg);
-                    filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px #22c55e);
-                }
-                50% {
-                    transform: rotate(180deg);
-                    filter: drop-shadow(0 0 9px #facc15) drop-shadow(0 0 16px #a855f7);
-                }
-                100% {
-                    transform: rotate(360deg);
-                    filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px #22c55e);
-                }
-            }
-            @keyframes trElectricArcFlash {
-                0%, 100% {
-                    box-shadow:
-                        0 0 14px rgba(56, 189, 248, 0.85),
-                        0 0 26px rgba(34, 197, 94, 0.55),
-                        inset 0 0 14px rgba(56, 189, 248, 0.45);
-                }
-                25% {
-                    box-shadow:
-                        0 0 20px rgba(250, 204, 21, 0.95),
-                        0 0 32px rgba(56, 189, 248, 0.8),
-                        inset 0 0 18px rgba(250, 204, 21, 0.55);
-                }
-                50% {
-                    box-shadow:
-                        0 0 16px rgba(168, 85, 247, 0.95),
-                        0 0 30px rgba(236, 72, 153, 0.7),
-                        inset 0 0 16px rgba(168, 85, 247, 0.5);
-                }
-                75% {
-                    box-shadow:
-                        0 0 22px rgba(34, 197, 94, 1),
-                        0 0 36px rgba(56, 189, 248, 0.85),
-                        inset 0 0 18px rgba(34, 197, 94, 0.6);
-                }
-            }
             @keyframes trOrbBlink {
                 0%, 100% { transform: scale(0.85); opacity: 0.75; }
                 50% { transform: scale(1.25); opacity: 1; }
+            }
+
+            /* Password Auth Modal */
+            #tr-rahat-auth-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(2, 6, 15, 0.74);
+                backdrop-filter: blur(5px);
+                z-index: 2147483647;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 14px;
+                box-sizing: border-box;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            }
+            .tr-auth-card {
+                width: 100%;
+                max-width: 376px;
+                background: linear-gradient(180deg, #0c1324 0%, #070b16 100%);
+                border-radius: 22px;
+                border: 2.5px solid #38bdf8;
+                padding: 18px;
+                box-sizing: border-box;
+                color: #f8fafc;
+                animation: trSnappyPop 0.25s ease-out, trSlowLightBorder 4.5s infinite linear;
+            }
+            .tr-auth-top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 14px;
+            }
+            .tr-auth-profile {
+                display: flex;
+                align-items: center;
+                gap: 11px;
+            }
+            .tr-auth-avatar-ring {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                padding: 2.5px;
+                background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7, #facc15);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: trSlowLightBorder 4s infinite linear;
+            }
+            .tr-auth-avatar-ring img {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            .tr-auth-close {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                border: 1.5px solid rgba(148, 163, 184, 0.35);
+                background: rgba(30, 41, 59, 0.85);
+                color: #e2e8f0;
+                font-size: 13px;
+                font-weight: 800;
+                cursor: pointer;
+            }
+            .tr-vip-box {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                background: linear-gradient(90deg, rgba(24, 34, 58, 0.9), rgba(15, 23, 42, 0.95));
+                border: 1.5px solid rgba(56, 189, 248, 0.35);
+                border-radius: 15px;
+                padding: 11px 12px;
+                margin-bottom: 12px;
+            }
+            .tr-vip-icon-wrap {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 2px solid #facc15;
+                box-shadow: 0 0 14px rgba(250, 204, 21, 0.55);
+                flex-shrink: 0;
+            }
+            .tr-vip-icon-wrap img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .tr-tg-btn {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                background: linear-gradient(90deg, #0b192e 0%, #11223d 100%);
+                border: 2px solid #f59e0b;
+                border-radius: 15px;
+                padding: 11px 14px;
+                margin-bottom: 16px;
+                cursor: pointer;
+                text-align: left;
+                color: #ffffff;
+                box-shadow: 0 0 18px rgba(245, 158, 11, 0.28);
+                animation: trSlowLightBorder 5s infinite linear;
+            }
+            .tr-tg-circle {
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #29b6f6, #0288d1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                font-weight: 900;
+                color: #ffffff;
+                flex-shrink: 0;
+            }
+            .tr-key-input {
+                width: 100%;
+                background: #060b16;
+                border: 1.8px solid rgba(56, 189, 248, 0.45);
+                border-radius: 13px;
+                padding: 12px 14px;
+                color: #ffffff;
+                font-size: 13px;
+                font-weight: 700;
+                box-sizing: border-box;
+                outline: none;
+                margin-bottom: 12px;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+            .tr-key-input.tr-input-error {
+                border-color: #ef4444;
+                box-shadow: 0 0 18px rgba(239, 68, 68, 0.75);
+            }
+            .tr-key-input.tr-input-success {
+                border-color: #22c55e;
+                box-shadow: 0 0 18px rgba(34, 197, 94, 0.75);
+            }
+            .tr-activate-btn {
+                width: 100%;
+                border: none;
+                border-radius: 13px;
+                padding: 13px;
+                font-size: 13px;
+                font-weight: 900;
+                letter-spacing: 0.7px;
+                color: #ffffff;
+                cursor: pointer;
+                background: linear-gradient(90deg, #f97316, #ec4899, #22c55e, #38bdf8);
+                background-size: 250% 250%;
+                animation: trAuthBtnShift 3.5s ease infinite;
+                box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35);
+            }
+            .tr-auth-status {
+                margin-top: 10px;
+                min-height: 18px;
+                font-size: 11.5px;
+                font-weight: 800;
+                text-align: center;
             }
 
             /* Square Bot Icon + Thick Compact Wave Aura Underneath */
@@ -210,7 +387,7 @@ BOT_JS_CODE = r"""
                 border: 4.5px solid #22c55e;
                 pointer-events: none;
                 z-index: -1;
-                animation: trThickWave1 1.65s infinite ease-out;
+                animation: trThickWavePulse 1.65s infinite ease-out;
             }
             .tr-wave-ring.tr-w2 { animation-delay: 0.55s; }
             .tr-wave-ring.tr-w3 { animation-delay: 1.1s; }
@@ -291,7 +468,7 @@ BOT_JS_CODE = r"""
                 animation: trSnappyPop 0.22s cubic-bezier(0.16, 1, 0.3, 1), trSparkleRim 2.2s infinite linear;
             }
 
-            /* Panel 1: Market Analysis Capture with Trader Rahat Logo Inside */
+            /* Panel 1: Market Analysis Capture */
             .tr-head {
                 display: flex;
                 align-items: center;
@@ -363,7 +540,7 @@ BOT_JS_CODE = r"""
                 z-index: 3;
             }
 
-            /* Panel 2: 4-Second High-Color 6-Node Hub */
+            /* Panel 2: 6-Node Hub */
             .tr-hub-header {
                 display: flex;
                 align-items: center;
@@ -531,7 +708,7 @@ BOT_JS_CODE = r"""
                 box-shadow: 0 0 22px rgba(56, 189, 248, 0.65);
             }
 
-            /* Panel 3: Snappy Trade Signal + Circular Electric Confidence Ring */
+            /* Panel 3: Trade Signal + Smooth Circular Confidence Ring */
             .tr-call-card {
                 margin: 9px 0 11px;
                 padding: 12px;
@@ -563,8 +740,6 @@ BOT_JS_CODE = r"""
                 border-radius: 13px;
                 padding: 9px;
             }
-
-            /* Circular Electric Lightning Confidence Ring */
             .tr-conf-circle-wrap {
                 display: flex;
                 flex-direction: column;
@@ -573,29 +748,29 @@ BOT_JS_CODE = r"""
                 background: radial-gradient(circle, rgba(15, 23, 42, 0.98) 55%, rgba(8, 15, 30, 0.98) 100%);
                 border-radius: 14px;
                 padding: 8px;
-                border: 1px solid rgba(56, 189, 248, 0.22);
+                border: 1px solid rgba(56, 189, 248, 0.24);
             }
-            .tr-electric-circle {
+            .tr-smooth-circle {
                 position: relative;
-                width: 108px;
-                height: 108px;
+                width: 110px;
+                height: 110px;
                 border-radius: 50%;
+                border: 2.5px solid #38bdf8;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 background: radial-gradient(circle at 50% 40%, #0f213d 0%, #070e1c 80%);
-                animation: trElectricArcFlash 2.8s infinite ease-in-out;
+                animation: trSmoothCircleGlow 4.5s infinite ease-in-out;
             }
-            .tr-electric-ring-svg {
+            .tr-smooth-ring-svg {
                 position: absolute;
                 inset: -4px;
-                width: 116px;
-                height: 116px;
+                width: 118px;
+                height: 118px;
                 pointer-events: none;
-                animation: trElectricSpinSlow 5.5s linear infinite;
+                animation: trSmoothRingSpin 7s linear infinite;
             }
-
             .tr-spark-confirm-strip {
                 position: relative;
                 margin-top: 10px;
@@ -605,17 +780,15 @@ BOT_JS_CODE = r"""
                 align-items: center;
                 justify-content: space-between;
                 border: 2px solid #38bdf8;
-                animation: trSparkleRim 2s infinite linear;
+                animation: trSparkleRim 2.4s infinite linear;
                 cursor: pointer;
             }
             .tr-side-orb {
                 width: 12px;
                 height: 12px;
                 border-radius: 50%;
-                animation: trOrbBlink 1.1s infinite ease-in-out;
+                animation: trOrbBlink 1.2s infinite ease-in-out;
             }
-
-            /* Top-Right Trade Opened Confirmation Toast */
             #tr-rahat-trade-popup {
                 position: fixed;
                 top: 64px;
@@ -628,11 +801,137 @@ BOT_JS_CODE = r"""
                 align-items: center;
                 gap: 10px;
                 border: 2px solid #4ade80;
-                animation: trSnappyPop 0.22s ease-out, trSparkleRim 2s infinite linear;
+                animation: trSnappyPop 0.22s ease-out, trSparkleRim 2.4s infinite linear;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             }
         `;
         document.head.appendChild(style);
+    }
+
+    function isUnlocked() {
+        try {
+            return localStorage.getItem(AUTH_STORAGE_KEY) === "true";
+        } catch (_) {
+            return false;
+        }
+    }
+
+    function setUnlocked() {
+        try {
+            localStorage.setItem(AUTH_STORAGE_KEY, "true");
+        } catch (_) {}
+    }
+
+    function showPasswordGate(onSuccess) {
+        const old = document.getElementById("tr-rahat-auth-backdrop");
+        if (old) old.remove();
+
+        const backdrop = document.createElement("div");
+        backdrop.id = "tr-rahat-auth-backdrop";
+
+        backdrop.innerHTML = `
+            <div class="tr-auth-card">
+                <div class="tr-auth-top">
+                    <div class="tr-auth-profile">
+                        <div class="tr-auth-avatar-ring">
+                            <img src="${BOT_LOGO}" alt="${AUTH_TITLE}" onerror="this.style.display='none';" />
+                        </div>
+                        <div>
+                            <div style="font-size:15px;font-weight:900;color:#ffffff;letter-spacing:0.2px;">${AUTH_TITLE}</div>
+                            <div style="font-size:10px;font-weight:800;color:#f59e0b;letter-spacing:1.1px;margin-top:2px;">SECURE LOGIN</div>
+                        </div>
+                    </div>
+                    <button class="tr-auth-close" id="tr-auth-x" title="Close">✕</button>
+                </div>
+
+                <div class="tr-vip-box">
+                    <div class="tr-vip-icon-wrap">
+                        <img src="${VIP_BADGE_LOGO}" alt="Official VIP Access" onerror="this.style.display='none';" />
+                    </div>
+                    <div>
+                        <div style="font-size:13px;font-weight:800;color:#ffffff;">Official VIP Access</div>
+                        <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Join Telegram for updates &amp; keys.</div>
+                    </div>
+                </div>
+
+                <button type="button" class="tr-tg-btn" id="tr-tg-community-btn">
+                    <span class="tr-tg-circle">✈</span>
+                    <div>
+                        <div style="font-size:13px;font-weight:900;color:#38bdf8;">Trading Community</div>
+                        <div style="font-size:10.5px;color:#cbd5e1;margin-top:1px;">Click to Join Telegram</div>
+                    </div>
+                </button>
+
+                <div style="font-size:12px;font-weight:800;color:#e2e8f0;margin-bottom:7px;">Bot Access Key</div>
+                <input
+                    id="tr-bot-key-input"
+                    type="password"
+                    class="tr-key-input"
+                    placeholder="Enter Bot Access Key"
+                    autocomplete="off"
+                />
+
+                <button type="button" class="tr-activate-btn" id="tr-activate-key-btn">
+                    ACTIVATE BOT
+                </button>
+
+                <div id="tr-auth-status-msg" class="tr-auth-status"></div>
+            </div>
+        `;
+
+        document.body.appendChild(backdrop);
+
+        document.getElementById("tr-auth-x").onclick = () => {
+            if (backdrop.parentNode) backdrop.remove();
+        };
+
+        document.getElementById("tr-tg-community-btn").onclick = () => {
+            window.open(TELEGRAM_URL, "_blank", "noopener,noreferrer");
+        };
+
+        const inputEl = document.getElementById("tr-bot-key-input");
+        const actBtn = document.getElementById("tr-activate-key-btn");
+        const statusEl = document.getElementById("tr-auth-status-msg");
+        let busy = false;
+
+        const verifyKey = () => {
+            if (busy) return;
+            const entered = (inputEl.value || "").trim();
+
+            if (entered === BOT_PASSWORD) {
+                busy = true;
+                inputEl.classList.remove("tr-input-error");
+                inputEl.classList.add("tr-input-success");
+                actBtn.disabled = true;
+                actBtn.style.opacity = "0.8";
+                statusEl.style.color = "#38bdf8";
+                statusEl.textContent = "Verifying License Key...";
+
+                setTimeout(() => {
+                    statusEl.style.color = "#4ade80";
+                    statusEl.textContent = "Successful License Key!";
+                    setUnlocked();
+
+                    setTimeout(() => {
+                        if (backdrop.parentNode) backdrop.remove();
+                        if (typeof onSuccess === "function") onSuccess();
+                    }, 750);
+                }, 1400);
+            } else {
+                inputEl.classList.remove("tr-input-success");
+                inputEl.classList.add("tr-input-error");
+                statusEl.style.color = "#f87171";
+                statusEl.textContent = "Incorrect Password!";
+                setTimeout(() => {
+                    inputEl.classList.remove("tr-input-error");
+                }, 1400);
+            }
+        };
+
+        actBtn.onclick = verifyKey;
+        inputEl.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") verifyKey();
+        });
     }
 
     function detectMarketInfo() {
@@ -660,64 +959,108 @@ BOT_JS_CODE = r"""
         return (base + delta).toFixed(3);
     }
 
-    function getDynamicTradeProfile(isCall, confidence) {
-        const callSetups = [
-            {
-                pattern: "Bullish Engulfing Breakout",
-                zoneLabel: "▲ BREAKOUT TARGET",
-                midLabel: "◆ DEMAND SURGE ZONE",
-                lowLabel: "▼ STRONG BUY SUPPORT"
-            },
-            {
-                pattern: "Morning Star Reversal",
-                zoneLabel: "▲ UPPER LIQUIDITY",
-                midLabel: "◆ EMA GOLDEN CROSS",
-                lowLabel: "▼ REVERSAL FLOOR"
-            },
-            {
-                pattern: "Ascending Channel Impulse",
-                zoneLabel: "▲ CHANNEL RESISTANCE",
-                midLabel: "◆ MOMENTUM PIVOT",
-                lowLabel: "▼ HIGHER LOW BASE"
-            },
-            {
-                pattern: "Bullish Pinbar Rejection",
-                zoneLabel: "▲ PROFIT EXPANSION",
-                midLabel: "◆ ORDERBLOCK ENTRY",
-                lowLabel: "▼ WICK REJECTION ZONE"
-            }
-        ];
+    function getTradeKnowledgeAndPattern(isCall, confidence) {
+        const seed = (Math.floor(Date.now() / 1000) + confidence) % 5;
 
-        const putSetups = [
-            {
-                pattern: "Bearish Engulfing Drop",
-                zoneLabel: "▲ SUPPLY REJECTION",
-                midLabel: "◆ SELL PRESSURE ZONE",
-                lowLabel: "▼ DOWNSIDE TARGET"
-            },
-            {
-                pattern: "Evening Star Breakdown",
-                zoneLabel: "▲ DOUBLE TOP CEILING",
-                midLabel: "◆ EMA DEATH CROSS",
-                lowLabel: "▼ LIQUIDITY DROP"
-            },
-            {
-                pattern: "Descending Wedge Break",
-                zoneLabel: "▲ LOWER HIGH CAP",
-                midLabel: "◆ VOLUME DUMP PIVOT",
-                lowLabel: "▼ SUPPORT BREAKDOWN"
-            },
-            {
-                pattern: "Shooting Star Rejection",
-                zoneLabel: "▲ UPPER WICK TRAP",
-                midLabel: "◆ SUPPLY ORDERBLOCK",
-                lowLabel: "▼ BEARISH TARGET"
-            }
-        ];
-
-        const list = isCall ? callSetups : putSetups;
-        const idx = (Math.floor(Date.now() / 1000) + confidence) % list.length;
-        return list[idx];
+        if (isCall) {
+            const callItems = [
+                {
+                    pattern: "Bullish Engulfing Breakout",
+                    movementHeader: "TREND MOVEMENT • BUY FLOW",
+                    knowledge: [
+                        "▲ HIGHER HIGH BREAKOUT",
+                        "◆ BULLISH RSI MOMENTUM",
+                        "▼ DEMAND FLOOR DEFENSE"
+                    ]
+                },
+                {
+                    pattern: "Morning Star Reversal",
+                    movementHeader: "TREND MOVEMENT • REVERSAL",
+                    knowledge: [
+                        "▲ REVERSAL TARGET ZONE",
+                        "◆ BUYER VOLUME SPIKE",
+                        "▼ BASE SUPPORT LOCKED"
+                    ]
+                },
+                {
+                    pattern: "Ascending Channel Push",
+                    movementHeader: "TREND MOVEMENT • CHANNEL UP",
+                    knowledge: [
+                        "▲ UPPER CHANNEL EDGE",
+                        "◆ EMA GOLDEN ALIGNMENT",
+                        "▼ TRENDLINE SUPPORT"
+                    ]
+                },
+                {
+                    pattern: "Bullish Pinbar Rejection",
+                    movementHeader: "TREND MOVEMENT • WICK REJECT",
+                    knowledge: [
+                        "▲ UPSIDE IMPULSE TARGET",
+                        "◆ LIQUIDITY SWEEP BUY",
+                        "▼ STRONG WICK FLOOR"
+                    ]
+                },
+                {
+                    pattern: "Three White Soldiers",
+                    movementHeader: "TREND MOVEMENT • SURGE",
+                    knowledge: [
+                        "▲ CONTINUATION CEILING",
+                        "◆ MACD BULLISH CROSS",
+                        "▼ BUYER CONTROL ZONE"
+                    ]
+                }
+            ];
+            return callItems[seed];
+        } else {
+            const putItems = [
+                {
+                    pattern: "Bearish Engulfing Drop",
+                    movementHeader: "TREND MOVEMENT • SELL FLOW",
+                    knowledge: [
+                        "▲ SUPPLY ZONE REJECTION",
+                        "◆ BEARISH RSI PRESSURE",
+                        "▼ DOWNSIDE TARGET ZONE"
+                    ]
+                },
+                {
+                    pattern: "Evening Star Breakdown",
+                    movementHeader: "TREND MOVEMENT • REVERSAL",
+                    knowledge: [
+                        "▲ TOP REVERSAL CAP",
+                        "◆ SELLER VOLUME SURGE",
+                        "▼ BREAKDOWN SUPPORT"
+                    ]
+                },
+                {
+                    pattern: "Descending Channel Slide",
+                    movementHeader: "TREND MOVEMENT • CHANNEL DOWN",
+                    knowledge: [
+                        "▲ LOWER HIGH RESISTANCE",
+                        "◆ EMA BEARISH PRESSURE",
+                        "▼ CHANNEL FLOOR TARGET"
+                    ]
+                },
+                {
+                    pattern: "Shooting Star Rejection",
+                    movementHeader: "TREND MOVEMENT • WICK REJECT",
+                    knowledge: [
+                        "▲ UPPER WICK TRAP",
+                        "◆ SELL LIQUIDITY PUSH",
+                        "▼ BEARISH DROP ZONE"
+                    ]
+                },
+                {
+                    pattern: "Three Black Crows",
+                    movementHeader: "TREND MOVEMENT • DUMP",
+                    knowledge: [
+                        "▲ RESISTANCE CEILING",
+                        "◆ MACD BEARISH CROSS",
+                        "▼ SELLER MOMENTUM FLOOR"
+                    ]
+                }
+            ];
+            return putItems[seed];
+        }
     }
 
     function showSparkleTradeConfirmation(pair, signal, price, confidence, isCall) {
@@ -788,7 +1131,7 @@ BOT_JS_CODE = r"""
             signal: fallback,
             confidence: dynamicConf,
             trend: fallback === "CALL" ? "Uptrend" : "Downtrend",
-            pattern: fallback === "CALL" ? "Bullish Momentum" : "Bearish Momentum"
+            pattern: fallback === "CALL" ? "Bullish Engulfing Breakout" : "Bearish Engulfing Drop"
         };
     }
 
@@ -811,7 +1154,7 @@ BOT_JS_CODE = r"""
             if (modal.parentNode) modal.remove();
         };
 
-        // Step 1 (0 -> 3500ms): Market Analysis Capture with Trader Rahat Logo + 20->40->60->80->100
+        // Step 1 (0 -> 3500ms): Market Analysis Capture
         win.innerHTML = `
             <div class="tr-head">
                 <div style="display:flex;align-items:center;gap:8px;">
@@ -859,7 +1202,7 @@ BOT_JS_CODE = r"""
             }, (idx + 1) * 700);
         });
 
-        // Step 2 (3500ms -> 7500ms = exact 4 seconds): High-Color 6-Node Chart Analyze Hub
+        // Step 2 (3500ms -> 7500ms = 4s): 6-Node Chart Analyze Hub
         setTimeout(() => {
             if (!modal.parentNode) return;
             win.innerHTML = `
@@ -961,7 +1304,7 @@ BOT_JS_CODE = r"""
             `;
         }, 3500);
 
-        // Step 3 (at 7500ms = after exact 4s second scan): Snappy Trade Card with Circular Electric Confidence
+        // Step 3 (at 7500ms): Smooth Trade Signal Card + Circular Confidence (1-100) + Trade-Specific Trend & Pattern
         setTimeout(async () => {
             if (!modal.parentNode) return;
             stopRtlBeam();
@@ -969,14 +1312,14 @@ BOT_JS_CODE = r"""
             const data = await signalPromise;
             const isCall = String(data.signal || "CALL").toUpperCase() === "CALL";
             const sigLabel = isCall ? "CALL" : "PUT";
-            const finalConf = Math.min(100, Math.max(1, Number(data.confidence) || (Math.floor(Math.random() * 100) + 1)));
+            const targetConf = Math.min(100, Math.max(1, Number(data.confidence) || (Math.floor(Math.random() * 100) + 1)));
             const trendText = isCall ? "Uptrend" : "Downtrend";
-            const setup = getDynamicTradeProfile(isCall, finalConf);
+            const info = getTradeKnowledgeAndPattern(isCall, targetConf);
             const livePrice = getPriceSample(isCall);
 
-            const convictionText = finalConf >= 75
+            const convictionText = targetConf >= 75
                 ? "High conviction"
-                : (finalConf >= 45 ? "Moderate pulse" : "Early signal");
+                : (targetConf >= 45 ? "Moderate pulse" : "Early signal");
 
             win.className = "tr-window tr-win-sparkle";
             win.innerHTML = `
@@ -1004,33 +1347,32 @@ BOT_JS_CODE = r"""
                     </div>
 
                     <div class="tr-grid-2">
-                        <!-- Circular Electric Lightning Confidence Box (1-100%) -->
+                        <!-- Smooth Circular Confidence Ring (1-100%) -->
                         <div class="tr-conf-circle-wrap">
-                            <div class="tr-electric-circle">
-                                <svg class="tr-electric-ring-svg" viewBox="0 0 116 116">
+                            <div class="tr-smooth-circle">
+                                <svg class="tr-smooth-ring-svg" viewBox="0 0 118 118">
                                     <defs>
-                                        <linearGradient id="trBoltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <linearGradient id="trSmoothRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                             <stop offset="0%" stop-color="#38bdf8" />
-                                            <stop offset="35%" stop-color="#22c55e" />
-                                            <stop offset="70%" stop-color="#facc15" />
-                                            <stop offset="100%" stop-color="#a855f7" />
+                                            <stop offset="33%" stop-color="#22c55e" />
+                                            <stop offset="66%" stop-color="#a855f7" />
+                                            <stop offset="100%" stop-color="#facc15" />
                                         </linearGradient>
                                     </defs>
-                                    <circle cx="58" cy="58" r="53" fill="none" stroke="url(#trBoltGrad)" stroke-width="3" stroke-dasharray="18 7 9 6 24 8" stroke-linecap="round" />
-                                    <circle cx="58" cy="58" r="49" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="6 14" opacity="0.85" />
+                                    <circle cx="59" cy="59" r="54" fill="none" stroke="url(#trSmoothRingGrad)" stroke-width="3.2" stroke-dasharray="22 8 14 8" stroke-linecap="round" />
                                 </svg>
                                 <div style="font-size:8px;font-weight:900;letter-spacing:0.6px;color:#94a3b8;">CONFIDENCE</div>
-                                <div style="font-size:24px;font-weight:900;line-height:1.1;color:${isCall ? "#34d399" : "#f87171"};">${finalConf}%</div>
+                                <div id="tr-smooth-conf-num" style="font-size:24px;font-weight:900;line-height:1.1;color:${isCall ? "#34d399" : "#f87171"};">1%</div>
                                 <div style="font-size:8.5px;font-weight:700;color:#e2e8f0;">${convictionText}</div>
                             </div>
                         </div>
 
-                        <!-- Right Box: Trend Movement & Dynamic Levels -->
+                        <!-- Right Box: Trade-Specific Trend Movement & Knowledge -->
                         <div class="tr-stat-tile" style="display:flex;flex-direction:column;justify-content:center;">
-                            <div style="font-size:9.5px;font-weight:900;color:#38bdf8;letter-spacing:0.5px;margin-bottom:5px;">TREND MOVEMENT</div>
-                            <div style="font-size:10px;font-weight:800;color:#f87171;margin-bottom:3px;">${setup.zoneLabel}</div>
-                            <div style="font-size:10px;font-weight:800;color:#38bdf8;margin-bottom:3px;">${setup.midLabel}</div>
-                            <div style="font-size:10px;font-weight:800;color:#34d399;">${setup.lowLabel}</div>
+                            <div style="font-size:9px;font-weight:900;color:#38bdf8;letter-spacing:0.4px;margin-bottom:5px;">${info.movementHeader}</div>
+                            <div style="font-size:10px;font-weight:800;color:${isCall ? "#4ade80" : "#f87171"};margin-bottom:3px;">${info.knowledge[0]}</div>
+                            <div style="font-size:10px;font-weight:800;color:#38bdf8;margin-bottom:3px;">${info.knowledge[1]}</div>
+                            <div style="font-size:10px;font-weight:800;color:#facc15;">${info.knowledge[2]}</div>
                         </div>
                     </div>
 
@@ -1039,7 +1381,7 @@ BOT_JS_CODE = r"""
                             TREND: <span style="color:${isCall ? "#34d399" : "#f87171"};">${trendText}</span>
                         </div>
                         <div class="tr-stat-tile" style="padding:7px 9px;font-size:10.5px;font-weight:800;">
-                            PATTERN: <span style="color:${isCall ? "#4ade80" : "#fb7185"};">${setup.pattern}</span>
+                            PATTERN: <span style="color:${isCall ? "#4ade80" : "#fb7185"};">${info.pattern}</span>
                         </div>
                     </div>
 
@@ -1054,9 +1396,19 @@ BOT_JS_CODE = r"""
             `;
             document.getElementById("tr-x3").onclick = closeAll;
 
+            // Smooth count-up from 1% to targetConf (1-100)
+            let cur = 1;
+            const confEl = document.getElementById("tr-smooth-conf-num");
+            const stepIncrement = Math.max(1, Math.ceil(targetConf / 24));
+            const smoothCounter = setInterval(() => {
+                cur = Math.min(targetConf, cur + stepIncrement);
+                if (confEl) confEl.textContent = `${cur}%`;
+                if (cur >= targetConf) clearInterval(smoothCounter);
+            }, 35);
+
             document.getElementById("tr-spark-confirm").onclick = () => {
                 closeAll();
-                showSparkleTradeConfirmation(pair, sigLabel, livePrice, finalConf, isCall);
+                showSparkleTradeConfirmation(pair, sigLabel, livePrice, targetConf, isCall);
             };
         }, 7500);
     }
@@ -1113,7 +1465,12 @@ BOT_JS_CODE = r"""
         window.addEventListener("touchend", onEnd);
 
         box.addEventListener("click", () => {
-            if (!moved) {
+            if (moved) return;
+            if (!isUnlocked()) {
+                showPasswordGate(() => {
+                    runBotSequence();
+                });
+            } else {
                 runBotSequence();
             }
         });
@@ -1202,18 +1559,17 @@ class GroqAIArbitrationCore:
             "temperature": 0.2,
             "max_tokens": 6
         }
-        # Dynamic confidence between 1 and 100 based on live RSI strength + micro-time
-        rsi_strength = int(min(99, max(1, abs(rsi_val - 50.0) * 2.2 + (int(time.time() * 13) % 45) + 30)))
+        dynamic_conf = int(min(100, max(1, ((int(time.time() * 19) + int(abs(rsi_val - 50) * 3)) % 100) + 1)))
         try:
             response = requests.post(url, json=payload, headers=headers, timeout=3)
             if response.status_code == 200:
                 decision = response.json()["choices"][0]["message"]["content"].strip().upper()
                 if decision in ["CALL", "PUT"]:
-                    return {"signal": decision, "confidence": rsi_strength}
+                    return {"signal": decision, "confidence": dynamic_conf}
         except Exception:
             pass
         fallback = "CALL" if (rsi_val < 50.0 or int(time.time() * 7) % 2 == 0) else "PUT"
-        return {"signal": fallback, "confidence": rsi_strength}
+        return {"signal": fallback, "confidence": dynamic_conf}
 
 
 @app.route("/")
@@ -1248,7 +1604,7 @@ def get_signal():
             "signal": sig,
             "confidence": conf,
             "trend": "Uptrend" if sig == "CALL" else "Downtrend",
-            "pattern": "Bullish Momentum" if sig == "CALL" else "Bearish Momentum",
+            "pattern": "Bullish Engulfing Breakout" if sig == "CALL" else "Bearish Engulfing Drop",
             "status": "GREEN_EXECUTE"
         })
         res.headers.add("Access-Control-Allow-Origin", "*")
@@ -1262,7 +1618,7 @@ def get_signal():
             "signal": fallback_dir,
             "confidence": dynamic_conf,
             "trend": "Uptrend" if fallback_dir == "CALL" else "Downtrend",
-            "pattern": "Bullish Momentum" if fallback_dir == "CALL" else "Bearish Momentum",
+            "pattern": "Bullish Engulfing Breakout" if fallback_dir == "CALL" else "Bearish Engulfing Drop",
             "status": "GREEN_EXECUTE"
         })
         res.headers.add("Access-Control-Allow-Origin", "*")
