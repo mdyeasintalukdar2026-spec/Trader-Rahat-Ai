@@ -15,13 +15,6 @@ logger = logging.getLogger("TraderRahatEngine")
 
 RENDER_SERVER_URL = os.environ.get("RENDER_SERVER_URL", "https://trader-rahat-ai.onrender.com")
 QX_API_KEY = os.environ.get("QX_API_KEY", "qx_live_1xxOcsg5_3vEavHfZwAkGufh9NLLWJhUqG3T6H6oCEuoDWeJV")
-QUANTEX_BOT_PRO_LIVE_KEY = os.environ.get(
-    "QUANTEX_BOT_PRO_LIVE_KEY",
-    "qx_live_sSoQiF7Q_q7m3UtNGyfzkCIOuEIueVVJUSABQsnbiJdF2dbCf"
-)
-MASSIVE_POLYGON_API_KEY = os.environ.get("MASSIVE_POLYGON_API_KEY", "Uip2hYrRprsQ5j7u4IQ2JxEsvlhRwEZ5")
-ALPHA_VANTAGE_API_KEY = os.environ.get("ALPHA_VANTAGE_API_KEY", "WWVFS64EUE341DNK")
-FRED_API_KEY = os.environ.get("FRED_KEY", "d37d3ed2255f2f5a9fb756c7b5f0b663")
 
 GROQ_API_KEYS = [
     k.strip() for k in [
@@ -1699,10 +1692,7 @@ class AllMarketResolver:
             parts = [p.strip() for p in cleaned.split("/") if p.strip()]
             if len(parts) == 2:
                 base, quote = parts[0], parts[1]
-                if quote in ("BDT", "USDT"):
-                    symbol = f"{base}/USD"
-                else:
-                    symbol = f"{base}/{quote}"
+                symbol = f"{base}/USD" if quote in ("BDT", "USDT") else f"{base}/{quote}"
                 return {"raw": raw, "symbol": symbol, "base": base, "category": category}
 
         for k, sym in cls.CRYPTO_MAP.items():
@@ -1720,12 +1710,12 @@ class UltraPrecisionEngine:
     @staticmethod
     def verify_news_and_market_safety(currency: str = "USD") -> dict:
         now_time = datetime.utcnow() + timedelta(hours=TIMEZONE_OFFSET)
-        for token in finnhub_pool.ordered_keys():
+        for token in finnhub_pool.ordered_keys()[:2]:
             if not token:
                 continue
             try:
                 url = f"https://finnhub.io/api/v1/calendar/economic?token={token}"
-                response = http_session.get(url, timeout=3)
+                response = http_session.get(url, timeout=1.8)
                 if response.status_code == 200:
                     finnhub_pool.mark_active(token)
                     events = response.json().get("economicCalendar", [])
@@ -1743,12 +1733,12 @@ class UltraPrecisionEngine:
 
     @staticmethod
     def fetch_multi_indicator_confluence(symbol: str = "EUR/USD", raw_asset: str = "") -> dict:
-        for api_key in twelvedata_pool.ordered_keys():
+        for api_key in twelvedata_pool.ordered_keys()[:2]:
             if not api_key:
                 continue
             try:
                 rsi_url = f"https://api.twelvedata.com/rsi?symbol={symbol}&interval=1min&apikey={api_key}"
-                resp = requests.get(rsi_url, timeout=3)
+                resp = http_session.get(rsi_url, timeout=2.0)
                 if resp.status_code == 200:
                     data = resp.json()
                     if "values" in data and len(data["values"]) > 0:
@@ -1759,10 +1749,9 @@ class UltraPrecisionEngine:
                         ema_bias = "NEUTRAL"
                         try:
                             series_url = f"https://api.twelvedata.com/time_series?symbol={symbol}&interval=1min&outputsize=4&apikey={api_key}"
-                            s_resp = requests.get(series_url, timeout=3)
+                            s_resp = http_session.get(series_url, timeout=2.0)
                             if s_resp.status_code == 200:
-                                s_data = s_resp.json()
-                                candles = s_data.get("values", [])
+                                candles = s_resp.json().get("values", [])
                                 if len(candles) >= 2:
                                     last_close = float(candles[0]["close"])
                                     prev_close = float(candles[1]["close"])
@@ -1786,7 +1775,6 @@ class UltraPrecisionEngine:
             except Exception:
                 continue
 
-        # Balanced two-way market state when external API is throttled or offline
         asset_seed = sum(ord(ch) for ch in (raw_asset + symbol))
         minute_bucket = int(time.time() // 60)
         combined = (asset_seed * 3 + minute_bucket * 11) % 60
@@ -1834,7 +1822,6 @@ class GroqAIArbitrationCore:
         if put_score > call_score:
             return "PUT", max(15, min(97, 54 + put_score * 6 + rsi_strength))
 
-        # Tie-breaker alternates cleanly by asset + minute so neither side dominates blindly
         tie_flag = ((sum(ord(c) for c in raw_asset) + int(time.time() // 60)) % 2) == 0
         chosen = "CALL" if tie_flag else "PUT"
         return chosen, max(18, min(92, 52 + rsi_strength))
@@ -1843,7 +1830,7 @@ class GroqAIArbitrationCore:
     def get_authentic_decision(market_context: str, rsi_val: float, momentum: float = 0.0, ema_bias: str = "NEUTRAL", raw_asset: str = "") -> dict:
         base_sig, base_conf = GroqAIArbitrationCore._confluence_decision(rsi_val, momentum, ema_bias, raw_asset)
 
-        for key in groq_pool.ordered_keys():
+        for key in groq_pool.ordered_keys()[:2]:
             if not key:
                 continue
             url = "https://api.groq.com/openai/v1/chat/completions"
@@ -1871,7 +1858,7 @@ class GroqAIArbitrationCore:
                 "max_tokens": 6
             }
             try:
-                response = requests.post(url, json=payload, headers=headers, timeout=3)
+                response = http_session.post(url, json=payload, headers=headers, timeout=2.2)
                 if response.status_code == 200:
                     groq_pool.mark_active(key)
                     decision = response.json()["choices"][0]["message"]["content"].strip().upper()
@@ -1965,12 +1952,3 @@ def bot_script():
     resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     resp.headers["Access-Control-Allow-Origin"] = "*"
     return resp
-
-
-def start_server():
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
-
-
-if __name__ == "__main__":
-    start_server()
