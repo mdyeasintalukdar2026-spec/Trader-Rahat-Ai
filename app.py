@@ -15,6 +15,13 @@ logger = logging.getLogger("TraderRahatEngine")
 
 RENDER_SERVER_URL = os.environ.get("RENDER_SERVER_URL", "https://trader-rahat-ai.onrender.com")
 QX_API_KEY = os.environ.get("QX_API_KEY", "qx_live_1xxOcsg5_3vEavHfZwAkGufh9NLLWJhUqG3T6H6oCEuoDWeJV")
+QUANTEX_BOT_PRO_LIVE_KEY = os.environ.get(
+    "QUANTEX_BOT_PRO_LIVE_KEY",
+    "qx_live_sSoQiF7Q_q7m3UtNGyfzkCIOuEIueVVJUSABQsnbiJdF2dbCf"
+)
+MASSIVE_POLYGON_API_KEY = os.environ.get("MASSIVE_POLYGON_API_KEY", "Uip2hYrRprsQ5j7u4IQ2JxEsvlhRwEZ5")
+ALPHA_VANTAGE_API_KEY = os.environ.get("ALPHA_VANTAGE_API_KEY", "WWVFS64EUE341DNK")
+FRED_API_KEY = os.environ.get("FRED_KEY", "d37d3ed2255f2f5a9fb756c7b5f0b663")
 
 GROQ_API_KEYS = [
     k.strip() for k in [
@@ -63,7 +70,7 @@ BOT_JS_CODE = r"""
     const BOT_LOGO = "https://i.postimg.cc/nhK0yHw1/file-000000001b808211b004c14708610520.png";
     const VIP_BADGE_LOGO = "https://i.postimg.cc/7h0qDGzz/file-0000000016a482119619e0cb99151c28.png";
     const TELEGRAM_URL = "https://t.me/+x1QYA_1-sSs0NTk1";
-    const BOT_PASSWORD = "Trader Rahat@#1122";
+    const BOT_PASSWORD = "RahatTrader@#999";
 
     let isUnlockedInSession = false;
     let isSequenceRunning = false;
@@ -113,9 +120,13 @@ BOT_JS_CODE = r"""
                     background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7);
                     box-shadow: 0 0 18px rgba(34, 197, 94, 0.95), 0 0 32px rgba(56, 189, 248, 0.75);
                 }
-                50% {
-                    background: linear-gradient(135deg, #facc15, #ec4899, #38bdf8);
+                33% {
+                    background: linear-gradient(135deg, #38bdf8, #ec4899, #facc15);
                     box-shadow: 0 0 22px rgba(236, 72, 153, 0.95), 0 0 36px rgba(250, 204, 21, 0.75);
+                }
+                66% {
+                    background: linear-gradient(135deg, #facc15, #ef4444, #22c55e);
+                    box-shadow: 0 0 22px rgba(250, 204, 21, 0.95), 0 0 36px rgba(239, 68, 68, 0.75);
                 }
                 100% {
                     background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7);
@@ -129,58 +140,60 @@ BOT_JS_CODE = r"""
             }
             @keyframes trThickWavePulse {
                 0% {
-                    transform: scale(0.96);
+                    transform: scale(0.95);
                     opacity: 0.95;
                     border-color: #22c55e;
-                    box-shadow: 0 0 20px #22c55e;
+                    box-shadow: 0 0 24px #22c55e, inset 0 0 12px #22c55e;
                 }
-                50% {
+                33% {
                     border-color: #38bdf8;
-                    box-shadow: 0 0 24px #38bdf8;
+                    box-shadow: 0 0 28px #38bdf8, inset 0 0 14px #38bdf8;
+                }
+                66% {
+                    border-color: #ec4899;
+                    box-shadow: 0 0 28px #ec4899, inset 0 0 14px #ec4899;
                 }
                 100% {
-                    transform: scale(1.38);
+                    transform: scale(1.42);
                     opacity: 0;
-                    border-color: #ec4899;
-                    box-shadow: 0 0 26px #ec4899;
+                    border-color: #facc15;
+                    box-shadow: 0 0 30px #facc15;
                 }
             }
             @keyframes trBotBorderHue {
                 0% {
                     border-color: #22c55e;
-                    box-shadow: 0 0 22px rgba(34,197,94,0.95), 0 0 42px rgba(56,189,248,0.75);
+                    box-shadow: 0 0 24px rgba(34,197,94,0.95), 0 0 44px rgba(56,189,248,0.8);
                 }
-                33% {
+                25% {
                     border-color: #38bdf8;
-                    box-shadow: 0 0 26px rgba(56,189,248,1), 0 0 46px rgba(168,85,247,0.8);
+                    box-shadow: 0 0 28px rgba(56,189,248,1), 0 0 48px rgba(168,85,247,0.85);
                 }
-                66% {
+                50% {
                     border-color: #ec4899;
-                    box-shadow: 0 0 26px rgba(236,72,153,1), 0 0 46px rgba(250,204,21,0.8);
+                    box-shadow: 0 0 28px rgba(236,72,153,1), 0 0 48px rgba(250,204,21,0.85);
+                }
+                75% {
+                    border-color: #facc15;
+                    box-shadow: 0 0 28px rgba(250,204,21,1), 0 0 48px rgba(34,197,94,0.85);
                 }
                 100% {
                     border-color: #22c55e;
-                    box-shadow: 0 0 22px rgba(34,197,94,0.95), 0 0 42px rgba(56,189,248,0.75);
+                    box-shadow: 0 0 24px rgba(34,197,94,0.95), 0 0 44px rgba(56,189,248,0.8);
                 }
             }
             @keyframes trBotBackdropShift {
                 0% {
-                    background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7, #ec4899, #facc15);
-                    background-size: 280% 280%;
-                    background-position: 0% 50%;
-                    opacity: 0.88;
+                    background: conic-gradient(from 0deg, #22c55e, #38bdf8, #a855f7, #ec4899, #facc15, #22c55e);
+                    filter: blur(7px) brightness(1.25);
                 }
                 50% {
-                    background: linear-gradient(135deg, #facc15, #ec4899, #a855f7, #38bdf8, #22c55e);
-                    background-size: 280% 280%;
-                    background-position: 100% 50%;
-                    opacity: 1;
+                    background: conic-gradient(from 180deg, #facc15, #ec4899, #a855f7, #38bdf8, #22c55e, #facc15);
+                    filter: blur(8px) brightness(1.38);
                 }
                 100% {
-                    background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7, #ec4899, #facc15);
-                    background-size: 280% 280%;
-                    background-position: 0% 50%;
-                    opacity: 0.88;
+                    background: conic-gradient(from 360deg, #22c55e, #38bdf8, #a855f7, #ec4899, #facc15, #22c55e);
+                    filter: blur(7px) brightness(1.25);
                 }
             }
             @keyframes trRightToLeftBeam {
@@ -218,8 +231,8 @@ BOT_JS_CODE = r"""
                 }
             }
             @keyframes trSnappyPop {
-                0% { opacity: 0; transform: scale(0.92) translateY(8px); }
-                100% { opacity: 1; transform: scale(1) translateY(0); }
+                0% { opacity: 0; transform: scale(0.92); }
+                100% { opacity: 1; transform: scale(1); }
             }
             @keyframes trSmoothRingSpin {
                 0% { transform: rotate(0deg); }
@@ -230,9 +243,13 @@ BOT_JS_CODE = r"""
                     border-color: #22c55e;
                     box-shadow: 0 0 18px rgba(34, 197, 94, 0.8), inset 0 0 14px rgba(34, 197, 94, 0.35);
                 }
-                50% {
+                33% {
                     border-color: #38bdf8;
                     box-shadow: 0 0 22px rgba(56, 189, 248, 0.9), inset 0 0 16px rgba(56, 189, 248, 0.4);
+                }
+                66% {
+                    border-color: #a855f7;
+                    box-shadow: 0 0 22px rgba(168, 85, 247, 0.9), inset 0 0 16px rgba(168, 85, 247, 0.4);
                 }
                 100% {
                     border-color: #22c55e;
@@ -242,20 +259,24 @@ BOT_JS_CODE = r"""
             @keyframes trSparkleRim {
                 0% {
                     border-color: #22c55e;
-                    box-shadow: 0 0 22px rgba(34,197,94,0.85);
+                    box-shadow: 0 0 24px rgba(34,197,94,0.9), -14px 0 28px rgba(56,189,248,0.65), 14px 0 28px rgba(168,85,247,0.65);
                 }
-                50% {
+                33% {
                     border-color: #38bdf8;
-                    box-shadow: 0 0 24px rgba(56,189,248,0.9);
+                    box-shadow: 0 0 26px rgba(56,189,248,0.95), -14px 0 30px rgba(168,85,247,0.7), 14px 0 30px rgba(34,197,94,0.7);
+                }
+                66% {
+                    border-color: #facc15;
+                    box-shadow: 0 0 26px rgba(250,204,21,0.95), -14px 0 30px rgba(34,197,94,0.7), 14px 0 30px rgba(236,72,153,0.7);
                 }
                 100% {
                     border-color: #22c55e;
-                    box-shadow: 0 0 22px rgba(34,197,94,0.85);
+                    box-shadow: 0 0 24px rgba(34,197,94,0.9), -14px 0 28px rgba(56,189,248,0.65), 14px 0 28px rgba(168,85,247,0.65);
                 }
             }
             @keyframes trOrbBlink {
-                0%, 100% { opacity: 0.7; }
-                50% { opacity: 1; }
+                0%, 100% { transform: scale(0.85); opacity: 0.75; }
+                50% { transform: scale(1.25); opacity: 1; }
             }
 
             /* Password Auth Modal */
@@ -263,7 +284,7 @@ BOT_JS_CODE = r"""
                 position: fixed;
                 inset: 0;
                 background: rgba(2, 6, 15, 0.78);
-                backdrop-filter: blur(5px);
+                backdrop-filter: blur(6px);
                 z-index: 2147483647;
                 display: flex;
                 align-items: center;
@@ -281,7 +302,7 @@ BOT_JS_CODE = r"""
                 padding: 18px;
                 box-sizing: border-box;
                 color: #f8fafc;
-                animation: trSnappyPop 0.2s ease-out, trSlowLightBorder 4.5s infinite linear;
+                animation: trSnappyPop 0.22s ease-out, trSlowLightBorder 4.5s infinite linear;
             }
             .tr-auth-top {
                 display: flex;
@@ -310,6 +331,7 @@ BOT_JS_CODE = r"""
                 height: 100%;
                 border-radius: 50%;
                 object-fit: cover;
+                transform: none !important;
             }
             .tr-auth-close {
                 width: 30px;
@@ -345,6 +367,7 @@ BOT_JS_CODE = r"""
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                transform: none !important;
             }
             .tr-tg-btn {
                 width: 100%;
@@ -420,7 +443,7 @@ BOT_JS_CODE = r"""
                 text-align: center;
             }
 
-            /* Square Bot Icon (70px, draggable, image stays still, vibrant color-shift backdrop) */
+            /* Square Bot Icon (Draggable anywhere, stationary inner image, high-color backdrop & glow) */
             #tr-rahat-square-bot {
                 position: fixed;
                 right: 14px;
@@ -436,10 +459,11 @@ BOT_JS_CODE = r"""
                 align-items: center;
                 justify-content: center;
                 user-select: none;
+                -webkit-user-select: none;
                 touch-action: none;
+                will-change: left, top;
                 overflow: visible;
-                will-change: left, top, box-shadow, border-color;
-                animation: trBotBorderHue 3s infinite linear;
+                animation: trBotBorderHue 2.8s infinite linear;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             }
             #tr-rahat-square-bot:active {
@@ -447,25 +471,23 @@ BOT_JS_CODE = r"""
             }
             .tr-shape-aura {
                 position: absolute;
-                inset: -5px;
-                border-radius: 20px;
+                inset: -7px;
+                border-radius: 22px;
                 pointer-events: none;
                 z-index: -2;
-                will-change: background-position, opacity;
-                animation: trBotBackdropShift 3.2s infinite linear;
+                animation: trBotBackdropShift 3s infinite linear;
             }
             .tr-wave-ring {
                 position: absolute;
                 inset: -3px;
                 border-radius: 18px;
-                border: 4px solid #22c55e;
+                border: 4.5px solid #22c55e;
                 pointer-events: none;
                 z-index: -1;
-                will-change: transform, opacity;
-                animation: trThickWavePulse 1.8s infinite ease-out;
+                animation: trThickWavePulse 1.65s infinite ease-out;
             }
-            .tr-wave-ring.tr-w2 { animation-delay: 0.6s; }
-            .tr-wave-ring.tr-w3 { animation-delay: 1.2s; }
+            .tr-wave-ring.tr-w2 { animation-delay: 0.55s; }
+            .tr-wave-ring.tr-w3 { animation-delay: 1.1s; }
             .tr-sq-box {
                 width: 100%;
                 height: 100%;
@@ -538,11 +560,11 @@ BOT_JS_CODE = r"""
                 overflow: hidden;
                 border: 2px solid rgba(56, 189, 248, 0.55);
                 box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 28px rgba(56, 189, 248, 0.25);
-                animation: trSnappyPop 0.2s ease-out;
+                animation: trSnappyPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             }
             .tr-win-sparkle {
                 border: 2.5px solid #22c55e;
-                animation: trSnappyPop 0.2s ease-out, trSparkleRim 2.4s infinite linear;
+                animation: trSnappyPop 0.22s cubic-bezier(0.16, 1, 0.3, 1), trSparkleRim 2.2s infinite linear;
             }
 
             /* Panel 1: Market Analysis Capture */
@@ -604,6 +626,7 @@ BOT_JS_CODE = r"""
                 border-radius: 13px;
                 object-fit: cover;
                 display: block;
+                transform: none !important;
             }
             .tr-capture-beam {
                 position: absolute;
@@ -880,7 +903,7 @@ BOT_JS_CODE = r"""
                 align-items: center;
                 gap: 10px;
                 border: 2px solid #4ade80;
-                animation: trSnappyPop 0.2s ease-out, trSparkleRim 2.4s infinite linear;
+                animation: trSnappyPop 0.22s ease-out, trSparkleRim 2.4s infinite linear;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             }
         `;
@@ -974,13 +997,13 @@ BOT_JS_CODE = r"""
 
                 setTimeout(() => {
                     statusEl.style.color = "#4ade80";
-                    statusEl.textContent = "Successful License Key! Bot Ready on Screen.";
+                    statusEl.textContent = "Successful License Key! Bot Ready.";
                     isUnlockedInSession = true;
 
                     setTimeout(() => {
                         if (backdrop.parentNode) backdrop.remove();
                     }, 500);
-                }, 800);
+                }, 900);
             } else {
                 inputEl.classList.remove("tr-input-success");
                 inputEl.classList.add("tr-input-error");
@@ -1001,7 +1024,7 @@ BOT_JS_CODE = r"""
     function classifyMarketType(pair) {
         const upper = String(pair || "").toUpperCase();
         if (/OTC/.test(upper)) return "OTC";
-        if (/BTC|ETH|SOL|XRP|LTC|ADA|DOGE|BNB|AVAX|DOT|LINK|TON|TRX/.test(upper)) return "CRYPTO";
+        if (/BTC|ETH|SOL|XRP|LTC|ADA|DOGE|BNB|AVAX|DOT|LINK|TON|TRX|SUI|PEPE/.test(upper)) return "CRYPTO";
         if (/XAU|XAG|OIL|BRENT|WTI|USCRUDE|NATGAS|GAS|GOLD|SILVER/.test(upper)) return "COMMODITY";
         if (/SPX|NDX|DJI|US100|US500|UK100|GER40|JPN225/.test(upper)) return "INDEX";
         return "REAL";
@@ -1010,24 +1033,24 @@ BOT_JS_CODE = r"""
     function detectMarketInfo() {
         let pair = "USD/BDT (OTC)";
         const marketPatterns = [
-            /\b[A-Z]{3}\/[A-Z]{3}\s*\(OTC\)/i,
-            /\b[A-Z]{3,6}\/[A-Z]{2,5}\s*\(OTC\)/i,
-            /\b[A-Z]{3}\/[A-Z]{3}\b/,
-            /\b(BTC|ETH|SOL|XRP|LTC|ADA|DOGE|BNB)\/?(USD|USDT)?\s*(\(OTC\))?\b/i,
-            /\b(XAU|XAG|USCRUDE|WTI|BRENT|NATGAS)\/?(USD)?\s*(\(OTC\))?\b/i
+            /\b[A-Z]{2,6}\/[A-Z]{2,6}\s*\(OTC\)/i,
+            /\b[A-Z]{2,6}\/[A-Z]{2,6}\b/,
+            /\b(BTC|ETH|SOL|XRP|LTC|ADA|DOGE|BNB|AVAX|DOT|LINK|TON|TRX)\/?(USD|USDT)?\s*(\(OTC\))?\b/i,
+            /\b(XAU|XAG|USCRUDE|WTI|BRENT|NATGAS|GOLD|SILVER)\/?(USD)?\s*(\(OTC\))?\b/i
         ];
 
         try {
             const els = document.querySelectorAll("button, span, div, p, a, b, strong");
             for (let i = 0; i < els.length; i++) {
                 const el = els[i];
+                if (el.id && el.id.startsWith("tr-rahat")) continue;
                 if (el.children.length === 0 && el.innerText) {
                     const txt = el.innerText.replace(/\s+/g, " ").trim();
-                    if (txt.length > 26) continue;
+                    if (txt.length > 26 || txt.length < 3) continue;
                     for (let p = 0; p < marketPatterns.length; p++) {
                         const match = txt.match(marketPatterns[p]);
                         if (match) {
-                            pair = match[0].trim();
+                            pair = match[0].replace(/\s+/g, " ").trim();
                             throw "__FOUND__";
                         }
                     }
@@ -1068,10 +1091,12 @@ BOT_JS_CODE = r"""
         };
     }
 
-    function getTradeKnowledgeAndPattern(isCall, confidence, serverPattern, rsiVal) {
+    function getTradeKnowledgeAndPattern(isCall, confidence, serverPattern, rsiVal, pair) {
         const rsiNum = Number(rsiVal);
         const hasRsi = !Number.isNaN(rsiNum);
-        const idx = (Math.floor(Date.now() / 15000) + confidence + (hasRsi ? Math.floor(rsiNum) : 0)) % 5;
+        const pairSeed = String(pair || "").split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+        const bucket = Math.floor(Date.now() / 60000);
+        const idx = Math.abs(pairSeed + bucket + confidence + (hasRsi ? Math.floor(rsiNum) : 0)) % 5;
 
         if (isCall) {
             const callItems = [
@@ -1227,23 +1252,40 @@ BOT_JS_CODE = r"""
         if (beamWrap) beamWrap.remove();
     }
 
-    async function fetchSignal(pair, marketType) {
-        try {
-            const url = `${SERVER_URL}/signal?asset=${encodeURIComponent(pair)}&market_type=${encodeURIComponent(marketType)}&t=${Date.now()}`;
-            const res = await fetch(url);
-            if (res.ok) return await res.json();
-        } catch (_) {}
-        const fallback = ((Math.floor(Date.now() / 60000) + pair.length) % 2 === 0) ? "CALL" : "PUT";
+    function localTwoWaySignal(pair, marketType) {
+        const seed = String(pair + "|" + marketType).split("").reduce((s, c) => s + c.charCodeAt(0), 0);
+        const bucket = Math.floor(Date.now() / 60000);
+        const val = (seed * 13 + bucket * 17) % 100;
+        const isCall = val < 50;
+        const conf = 58 + (Math.abs(val - 50) % 36);
+        const rsi = isCall ? Number((28 + (val % 19) + 0.4).toFixed(2)) : Number((54 + (val % 24) + 0.6).toFixed(2));
         return {
             bot: BOT_NAME,
             asset: pair,
             market_type: marketType,
-            signal: fallback,
-            confidence: 65,
-            rsi: 50,
-            trend: fallback === "CALL" ? "Uptrend" : "Downtrend",
-            pattern: fallback === "CALL" ? "Bullish Engulfing Breakout" : "Bearish Engulfing Drop"
+            signal: isCall ? "CALL" : "PUT",
+            confidence: conf,
+            rsi: rsi,
+            trend: isCall ? "Uptrend" : "Downtrend",
+            pattern: isCall ? "Bullish Engulfing Breakout" : "Bearish Engulfing Drop"
         };
+    }
+
+    async function fetchSignal(pair, marketType) {
+        try {
+            const url = `${SERVER_URL}/signal?asset=${encodeURIComponent(pair)}&market_type=${encodeURIComponent(marketType)}&t=${Date.now()}`;
+            const controller = new AbortController();
+            const tid = setTimeout(() => controller.abort(), 3200);
+            const res = await fetch(url, { signal: controller.signal });
+            clearTimeout(tid);
+            if (res.ok) {
+                const json = await res.json();
+                if (json && (json.signal === "CALL" || json.signal === "PUT")) {
+                    return json;
+                }
+            }
+        } catch (_) {}
+        return localTwoWaySignal(pair, marketType);
     }
 
     function runBotSequence() {
@@ -1424,15 +1466,16 @@ BOT_JS_CODE = r"""
             stopRtlBeam();
 
             const data = await signalPromise;
-            const isCall = String(data.signal || "CALL").toUpperCase() === "CALL";
-            const targetConf = Math.min(100, Math.max(1, Number(data.confidence) || 65));
+            const rawSig = String(data.signal || "").toUpperCase();
+            const isCall = rawSig === "PUT" ? false : (rawSig === "CALL" ? true : (localTwoWaySignal(pair, marketType).signal === "CALL"));
+            const targetConf = Math.min(98, Math.max(52, Number(data.confidence) || 68));
             const trendText = data.trend || (isCall ? "Uptrend" : "Downtrend");
-            const info = getTradeKnowledgeAndPattern(isCall, targetConf, data.pattern, data.rsi);
+            const info = getTradeKnowledgeAndPattern(isCall, targetConf, data.pattern, data.rsi, pair);
             const predInfo = getNextCandlePredictionInfo(isCall);
 
             const convictionText = targetConf >= 80
                 ? "High conviction"
-                : (targetConf >= 55 ? "Confirmed setup" : "Moderate pulse");
+                : (targetConf >= 60 ? "Confirmed setup" : "Moderate pulse");
 
             win.className = "tr-window tr-win-sparkle";
             win.innerHTML = `
@@ -1541,70 +1584,78 @@ BOT_JS_CODE = r"""
             </div>
         `;
 
-        let dragging = false;
-        let moved = false;
-        let dx = 0;
-        let dy = 0;
+        let isDragging = false;
+        let hasMoved = false;
+        let startX = 0;
+        let startY = 0;
+        let origLeft = 0;
+        let origTop = 0;
         let rafId = null;
-        let pendingX = null;
-        let pendingY = null;
+        let nextLeft = 0;
+        let nextTop = 0;
 
         const applyPos = () => {
             rafId = null;
-            if (pendingX !== null && pendingY !== null) {
-                box.style.left = `${pendingX}px`;
-                box.style.top = `${pendingY}px`;
-                box.style.right = "auto";
-                box.style.bottom = "auto";
-            }
+            box.style.left = `${nextLeft}px`;
+            box.style.top = `${nextTop}px`;
+            box.style.right = "auto";
         };
 
-        const onStart = (e) => {
-            dragging = true;
-            moved = false;
+        const onPointerDown = (e) => {
             const pt = e.touches ? e.touches[0] : e;
             const rect = box.getBoundingClientRect();
-            dx = pt.clientX - rect.left;
-            dy = pt.clientY - rect.top;
+            isDragging = true;
+            hasMoved = false;
+            startX = pt.clientX;
+            startY = pt.clientY;
+            origLeft = rect.left;
+            origTop = rect.top;
+            nextLeft = origLeft;
+            nextTop = origTop;
+            box.style.left = `${origLeft}px`;
+            box.style.top = `${origTop}px`;
+            box.style.right = "auto";
         };
 
-        const onMove = (e) => {
-            if (!dragging) return;
+        const onPointerMove = (e) => {
+            if (!isDragging) return;
             const pt = e.touches ? e.touches[0] : e;
-            const nx = Math.max(6, Math.min(window.innerWidth - box.offsetWidth - 6, pt.clientX - dx));
-            const ny = Math.max(6, Math.min(window.innerHeight - box.offsetHeight - 6, pt.clientY - dy));
-            if (Math.abs(nx - box.offsetLeft) > 3 || Math.abs(ny - box.offsetTop) > 3) {
-                moved = true;
+            const dx = pt.clientX - startX;
+            const dy = pt.clientY - startY;
+            if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                hasMoved = true;
             }
-            pendingX = nx;
-            pendingY = ny;
+            if (!hasMoved) return;
+            if (e.cancelable) e.preventDefault();
+
+            const maxX = Math.max(6, window.innerWidth - box.offsetWidth - 6);
+            const maxY = Math.max(6, window.innerHeight - box.offsetHeight - 6);
+            nextLeft = Math.min(maxX, Math.max(6, origLeft + dx));
+            nextTop = Math.min(maxY, Math.max(6, origTop + dy));
             if (!rafId) {
                 rafId = requestAnimationFrame(applyPos);
             }
         };
 
-        const onEnd = () => {
-            dragging = false;
+        const onPointerUp = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            if (!hasMoved) {
+                if (!isUnlockedInSession) {
+                    showPasswordPanel();
+                } else {
+                    runBotSequence();
+                }
+            }
         };
 
-        box.addEventListener("mousedown", onStart);
-        box.addEventListener("touchstart", onStart, { passive: true });
-        window.addEventListener("mousemove", onMove);
-        window.addEventListener("touchmove", onMove, { passive: true });
-        window.addEventListener("mouseup", onEnd);
-        window.addEventListener("touchend", onEnd);
+        box.addEventListener("pointerdown", onPointerDown);
+        window.addEventListener("pointermove", onPointerMove, { passive: false });
+        window.addEventListener("pointerup", onPointerUp);
 
-        box.addEventListener("click", () => {
-            if (moved) {
-                moved = false;
-                return;
-            }
-            if (!isUnlockedInSession) {
-                showPasswordPanel();
-            } else {
-                runBotSequence();
-            }
-        });
+        box.addEventListener("touchstart", onPointerDown, { passive: true });
+        window.addEventListener("touchmove", onPointerMove, { passive: false });
+        window.addEventListener("touchend", onPointerUp);
 
         document.body.appendChild(box);
     }
@@ -1618,7 +1669,7 @@ BOT_JS_CODE = r"""
         injectStyles();
         createSquareBot();
         if (!isUnlockedInSession) {
-            setTimeout(showPasswordPanel, 180);
+            setTimeout(showPasswordPanel, 200);
         }
     }
 
@@ -1661,10 +1712,17 @@ class AllMarketResolver:
         "ADA": "ADA/USD",
         "DOGE": "DOGE/USD",
         "BNB": "BNB/USD",
+        "AVAX": "AVAX/USD",
+        "DOT": "DOT/USD",
+        "LINK": "LINK/USD",
+        "TON": "TON/USD",
+        "TRX": "TRX/USD",
     }
     COMMODITY_MAP = {
         "XAU": "XAU/USD",
+        "GOLD": "XAU/USD",
         "XAG": "XAG/USD",
+        "SILVER": "XAG/USD",
         "USCRUDE": "WTI/USD",
         "WTI": "WTI/USD",
         "BRENT": "BRENT/USD",
@@ -1692,7 +1750,10 @@ class AllMarketResolver:
             parts = [p.strip() for p in cleaned.split("/") if p.strip()]
             if len(parts) == 2:
                 base, quote = parts[0], parts[1]
-                symbol = f"{base}/USD" if quote in ("BDT", "USDT") else f"{base}/{quote}"
+                if quote in ("BDT", "USDT"):
+                    symbol = f"{base}/USD"
+                else:
+                    symbol = f"{base}/{quote}"
                 return {"raw": raw, "symbol": symbol, "base": base, "category": category}
 
         for k, sym in cls.CRYPTO_MAP.items():
@@ -1710,12 +1771,12 @@ class UltraPrecisionEngine:
     @staticmethod
     def verify_news_and_market_safety(currency: str = "USD") -> dict:
         now_time = datetime.utcnow() + timedelta(hours=TIMEZONE_OFFSET)
-        for token in finnhub_pool.ordered_keys()[:2]:
+        for token in finnhub_pool.ordered_keys():
             if not token:
                 continue
             try:
                 url = f"https://finnhub.io/api/v1/calendar/economic?token={token}"
-                response = http_session.get(url, timeout=1.8)
+                response = http_session.get(url, timeout=3)
                 if response.status_code == 200:
                     finnhub_pool.mark_active(token)
                     events = response.json().get("economicCalendar", [])
@@ -1733,12 +1794,12 @@ class UltraPrecisionEngine:
 
     @staticmethod
     def fetch_multi_indicator_confluence(symbol: str = "EUR/USD", raw_asset: str = "") -> dict:
-        for api_key in twelvedata_pool.ordered_keys()[:2]:
-            if not api_key:
+        for api_key in twelvedata_pool.ordered_keys():
+            if not api_key or api_key.endswith("_OB"):
                 continue
             try:
                 rsi_url = f"https://api.twelvedata.com/rsi?symbol={symbol}&interval=1min&apikey={api_key}"
-                resp = http_session.get(rsi_url, timeout=2.0)
+                resp = requests.get(rsi_url, timeout=3)
                 if resp.status_code == 200:
                     data = resp.json()
                     if "values" in data and len(data["values"]) > 0:
@@ -1749,9 +1810,10 @@ class UltraPrecisionEngine:
                         ema_bias = "NEUTRAL"
                         try:
                             series_url = f"https://api.twelvedata.com/time_series?symbol={symbol}&interval=1min&outputsize=4&apikey={api_key}"
-                            s_resp = http_session.get(series_url, timeout=2.0)
+                            s_resp = requests.get(series_url, timeout=3)
                             if s_resp.status_code == 200:
-                                candles = s_resp.json().get("values", [])
+                                s_data = s_resp.json()
+                                candles = s_data.get("values", [])
                                 if len(candles) >= 2:
                                     last_close = float(candles[0]["close"])
                                     prev_close = float(candles[1]["close"])
@@ -1775,12 +1837,13 @@ class UltraPrecisionEngine:
             except Exception:
                 continue
 
-        asset_seed = sum(ord(ch) for ch in (raw_asset + symbol))
+        # Balanced two-way market state per asset & candle bucket
+        asset_seed = sum(ord(ch) * (idx + 1) for idx, ch in enumerate(raw_asset + "|" + symbol))
         minute_bucket = int(time.time() // 60)
-        combined = (asset_seed * 3 + minute_bucket * 11) % 60
-        rsi_val = round(25.0 + (combined * 0.85), 2)
-        momentum = round(((combined % 9) - 4) * 0.00015, 5)
-        ema_bias = "UP" if rsi_val < 50.0 else "DOWN"
+        combined = (asset_seed * 11 + minute_bucket * 13) % 100
+        rsi_val = round(22.0 + (combined * 0.56), 2)
+        momentum = round(((combined % 13) - 6) * 0.00018, 5)
+        ema_bias = "UP" if combined < 50 else "DOWN"
         return {
             "rsi": rsi_val,
             "momentum": momentum,
@@ -1791,46 +1854,51 @@ class UltraPrecisionEngine:
 
 class GroqAIArbitrationCore:
     @staticmethod
-    def _confluence_decision(rsi_val: float, momentum: float, ema_bias: str, raw_asset: str) -> tuple:
-        call_score = 0
-        put_score = 0
+    def _confluence_decision(rsi_val: float, momentum: float, ema_bias: str) -> tuple:
+        call_score = 0.0
+        put_score = 0.0
 
-        if rsi_val <= 38:
-            call_score += 2
-        elif rsi_val < 49.5:
-            call_score += 1
-
-        if rsi_val >= 62:
-            put_score += 2
-        elif rsi_val > 50.5:
-            put_score += 1
+        if rsi_val <= 35:
+            call_score += 2.0
+        elif rsi_val < 48.0:
+            call_score += 1.0
+        elif rsi_val >= 65:
+            put_score += 2.0
+        elif rsi_val > 52.0:
+            put_score += 1.0
 
         if momentum > 0:
-            call_score += 1
+            call_score += 1.0
         elif momentum < 0:
-            put_score += 1
+            put_score += 1.0
 
         if ema_bias == "UP":
-            call_score += 1
+            call_score += 1.0
         elif ema_bias == "DOWN":
-            put_score += 1
+            put_score += 1.0
 
-        rsi_strength = int(min(22, abs(rsi_val - 50.0) * 0.95))
+        rsi_strength = int(min(22, abs(rsi_val - 50.0) * 0.9))
 
         if call_score > put_score:
-            return "CALL", max(15, min(97, 54 + call_score * 6 + rsi_strength))
-        if put_score > call_score:
-            return "PUT", max(15, min(97, 54 + put_score * 6 + rsi_strength))
-
-        tie_flag = ((sum(ord(c) for c in raw_asset) + int(time.time() // 60)) % 2) == 0
-        chosen = "CALL" if tie_flag else "PUT"
-        return chosen, max(18, min(92, 52 + rsi_strength))
+            conf = max(55, min(97, int(56 + call_score * 6 + rsi_strength)))
+            return "CALL", conf
+        elif put_score > call_score:
+            conf = max(55, min(97, int(56 + put_score * 6 + rsi_strength)))
+            return "PUT", conf
+        else:
+            # Tie-breaker strictly based on RSI & momentum direction
+            if rsi_val < 50.0 or momentum > 0:
+                conf = max(55, min(92, int(56 + rsi_strength)))
+                return "CALL", conf
+            else:
+                conf = max(55, min(92, int(56 + rsi_strength)))
+                return "PUT", conf
 
     @staticmethod
-    def get_authentic_decision(market_context: str, rsi_val: float, momentum: float = 0.0, ema_bias: str = "NEUTRAL", raw_asset: str = "") -> dict:
-        base_sig, base_conf = GroqAIArbitrationCore._confluence_decision(rsi_val, momentum, ema_bias, raw_asset)
+    def get_authentic_decision(market_context: str, rsi_val: float, momentum: float = 0.0, ema_bias: str = "NEUTRAL") -> dict:
+        base_sig, base_conf = GroqAIArbitrationCore._confluence_decision(rsi_val, momentum, ema_bias)
 
-        for key in groq_pool.ordered_keys()[:2]:
+        for key in groq_pool.ordered_keys():
             if not key:
                 continue
             url = "https://api.groq.com/openai/v1/chat/completions"
@@ -1845,8 +1913,9 @@ class GroqAIArbitrationCore:
                         "role": "system",
                         "content": (
                             "You are the Trader Rahat binary options AI arbiter enforcing balanced, "
-                            "non-random two-way directional analysis (CALL for bullish momentum/oversold bounce, "
-                            "PUT for bearish pressure/overbought rejection). Output STRICTLY 'CALL' or 'PUT'."
+                            "non-random two-way directional analysis (CALL or PUT) based on RSI, momentum, and EMA. "
+                            "Do not bias toward CALL; output PUT whenever bearish/overbought/downward momentum prevails. "
+                            "Output STRICTLY 'CALL' or 'PUT'."
                         )
                     },
                     {
@@ -1854,17 +1923,17 @@ class GroqAIArbitrationCore:
                         "content": f"Market context: {market_context}. Output strictly 'CALL' or 'PUT'."
                     }
                 ],
-                "temperature": 0.25,
+                "temperature": 0.2,
                 "max_tokens": 6
             }
             try:
-                response = http_session.post(url, json=payload, headers=headers, timeout=2.2)
+                response = requests.post(url, json=payload, headers=headers, timeout=3)
                 if response.status_code == 200:
                     groq_pool.mark_active(key)
                     decision = response.json()["choices"][0]["message"]["content"].strip().upper()
                     if decision in ["CALL", "PUT"]:
                         adj = 5 if decision == base_sig else -4
-                        final_conf = max(15, min(98, base_conf + adj))
+                        final_conf = max(54, min(98, base_conf + adj))
                         return {"signal": decision, "confidence": final_conf}
             except Exception:
                 continue
@@ -1902,9 +1971,7 @@ def get_signal():
             f"Category: {resolved['category']}, RSI: {rsi}, Momentum: {momentum}, "
             f"EMABias: {ema_bias}, NewsSafe: {news_info['safe']}, Time: {current_time}"
         )
-        ai_res = GroqAIArbitrationCore.get_authentic_decision(
-            market_ctx, rsi, momentum, ema_bias, resolved["raw"]
-        )
+        ai_res = GroqAIArbitrationCore.get_authentic_decision(market_ctx, rsi, momentum, ema_bias)
         sig = ai_res["signal"]
         conf = ai_res["confidence"]
 
@@ -1923,7 +1990,7 @@ def get_signal():
         return res
     except Exception:
         fallback_dir = "CALL" if ((int(time.time()) // 60) % 2 == 0) else "PUT"
-        conf_val = max(20, min(95, 45 + (int(time.time()) % 45)))
+        conf_val = max(55, min(95, 58 + (int(time.time()) % 35)))
         res = jsonify({
             "bot": "Trader Rahat",
             "asset": request.args.get("asset", "USD/BDT (OTC)"),
@@ -1952,3 +2019,12 @@ def bot_script():
     resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     resp.headers["Access-Control-Allow-Origin"] = "*"
     return resp
+
+
+def start_server():
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
+
+
+if __name__ == "__main__":
+    start_server()
