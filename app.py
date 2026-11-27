@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, make_response, request
-import threading
 import requests
 import time
 import os
@@ -34,8 +33,10 @@ BOT_JS_CODE = r"""
     const BOT_LOGO = "https://i.postimg.cc/nhK0yHw1/file-000000001b808211b004c14708610520.png";
     const VIP_BADGE_LOGO = "https://i.postimg.cc/7h0qDGzz/file-0000000016a482119619e0cb99151c28.png";
     const TELEGRAM_URL = "https://t.me/+x1QYA_1-sSs0NTk1";
-    const BOT_PASSWORD = "traderrahat!\"=%\u20b3@";
-    const AUTH_STORAGE_KEY = "tr_rahat_ai_bot_unlocked_v1";
+    const BOT_PASSWORD = "Trader Rahat@#1122";
+    const AUTH_STORAGE_KEY = "tr_rahat_ai_bot_unlocked_v2";
+
+    let isSequenceRunning = false;
 
     function cleanup() {
         [
@@ -75,6 +76,28 @@ BOT_JS_CODE = r"""
                 100% {
                     border-color: #22c55e;
                     box-shadow: 0 0 24px rgba(34, 197, 94, 0.85), 0 0 46px rgba(56, 189, 248, 0.45);
+                }
+            }
+            @keyframes trTopAvatarHighColor {
+                0% {
+                    background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7);
+                    box-shadow: 0 0 18px rgba(34, 197, 94, 0.95), 0 0 32px rgba(56, 189, 248, 0.75);
+                    transform: scale(1);
+                }
+                33% {
+                    background: linear-gradient(135deg, #38bdf8, #ec4899, #facc15);
+                    box-shadow: 0 0 22px rgba(236, 72, 153, 0.95), 0 0 36px rgba(250, 204, 21, 0.75);
+                    transform: scale(1.05);
+                }
+                66% {
+                    background: linear-gradient(135deg, #facc15, #ef4444, #22c55e);
+                    box-shadow: 0 0 22px rgba(250, 204, 21, 0.95), 0 0 36px rgba(239, 68, 68, 0.75);
+                    transform: scale(1.02);
+                }
+                100% {
+                    background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7);
+                    box-shadow: 0 0 18px rgba(34, 197, 94, 0.95), 0 0 32px rgba(56, 189, 248, 0.75);
+                    transform: scale(1);
                 }
             }
             @keyframes trAuthBtnShift {
@@ -234,15 +257,15 @@ BOT_JS_CODE = r"""
                 gap: 11px;
             }
             .tr-auth-avatar-ring {
-                width: 48px;
-                height: 48px;
+                width: 50px;
+                height: 50px;
                 border-radius: 50%;
-                padding: 2.5px;
+                padding: 3px;
                 background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7, #facc15);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                animation: trSlowLightBorder 4s infinite linear;
+                animation: trTopAvatarHighColor 2.2s infinite ease-in-out;
             }
             .tr-auth-avatar-ring img {
                 width: 100%;
@@ -857,7 +880,7 @@ BOT_JS_CODE = r"""
                 <button type="button" class="tr-tg-btn" id="tr-tg-community-btn">
                     <span class="tr-tg-circle">✈</span>
                     <div>
-                        <div style="font-size:13px;font-weight:900;color:#38bdf8;">Trading Community</div>
+                        <div style="font-size:13px;font-weight:900;color:#38bdf8;">R-A Trading Community</div>
                         <div style="font-size:10.5px;color:#cbd5e1;margin-top:1px;">Click to Join Telegram</div>
                     </div>
                 </button>
@@ -1136,6 +1159,9 @@ BOT_JS_CODE = r"""
     }
 
     function runBotSequence() {
+        if (isSequenceRunning) return;
+        isSequenceRunning = true;
+
         const old = document.getElementById("tr-rahat-modal");
         if (old) old.remove();
 
@@ -1149,12 +1175,14 @@ BOT_JS_CODE = r"""
         modal.appendChild(win);
         document.body.appendChild(modal);
 
+        const timers = [];
         const closeAll = () => {
+            timers.forEach((t) => clearTimeout(t));
             stopRtlBeam();
             if (modal.parentNode) modal.remove();
+            isSequenceRunning = false;
         };
 
-        // Step 1 (0 -> 3500ms): Market Analysis Capture
         win.innerHTML = `
             <div class="tr-head">
                 <div style="display:flex;align-items:center;gap:8px;">
@@ -1194,16 +1222,15 @@ BOT_JS_CODE = r"""
 
         const steps = [40, 60, 80, 100];
         steps.forEach((val, idx) => {
-            setTimeout(() => {
+            timers.push(setTimeout(() => {
                 const pEl = document.getElementById("tr-step-pct");
                 const bEl = document.getElementById("tr-step-bar");
                 if (pEl) pEl.textContent = `${val}%`;
                 if (bEl) bEl.style.width = `${val}%`;
-            }, (idx + 1) * 700);
+            }, (idx + 1) * 700));
         });
 
-        // Step 2 (3500ms -> 7500ms = 4s): 6-Node Chart Analyze Hub
-        setTimeout(() => {
+        timers.push(setTimeout(() => {
             if (!modal.parentNode) return;
             win.innerHTML = `
                 <div class="tr-hub-header">
@@ -1302,10 +1329,9 @@ BOT_JS_CODE = r"""
 
                 <div class="tr-analyzing-pill">🧠 Analyzing chart...</div>
             `;
-        }, 3500);
+        }, 3500));
 
-        // Step 3 (at 7500ms): Smooth Trade Signal Card + Circular Confidence (1-100) + Trade-Specific Trend & Pattern
-        setTimeout(async () => {
+        timers.push(setTimeout(async () => {
             if (!modal.parentNode) return;
             stopRtlBeam();
 
@@ -1347,7 +1373,6 @@ BOT_JS_CODE = r"""
                     </div>
 
                     <div class="tr-grid-2">
-                        <!-- Smooth Circular Confidence Ring (1-100%) -->
                         <div class="tr-conf-circle-wrap">
                             <div class="tr-smooth-circle">
                                 <svg class="tr-smooth-ring-svg" viewBox="0 0 118 118">
@@ -1367,7 +1392,6 @@ BOT_JS_CODE = r"""
                             </div>
                         </div>
 
-                        <!-- Right Box: Trade-Specific Trend Movement & Knowledge -->
                         <div class="tr-stat-tile" style="display:flex;flex-direction:column;justify-content:center;">
                             <div style="font-size:9px;font-weight:900;color:#38bdf8;letter-spacing:0.4px;margin-bottom:5px;">${info.movementHeader}</div>
                             <div style="font-size:10px;font-weight:800;color:${isCall ? "#4ade80" : "#f87171"};margin-bottom:3px;">${info.knowledge[0]}</div>
@@ -1396,7 +1420,6 @@ BOT_JS_CODE = r"""
             `;
             document.getElementById("tr-x3").onclick = closeAll;
 
-            // Smooth count-up from 1% to targetConf (1-100)
             let cur = 1;
             const confEl = document.getElementById("tr-smooth-conf-num");
             const stepIncrement = Math.max(1, Math.ceil(targetConf / 24));
@@ -1410,7 +1433,7 @@ BOT_JS_CODE = r"""
                 closeAll();
                 showSparkleTradeConfirmation(pair, sigLabel, livePrice, targetConf, isCall);
             };
-        }, 7500);
+        }, 7500));
     }
 
     function createSquareBot() {
@@ -1646,4 +1669,4 @@ def start_server():
 
 
 if __name__ == "__main__":
-    threading.Thread(target=start_server, daemon=True).start()
+    start_server()
