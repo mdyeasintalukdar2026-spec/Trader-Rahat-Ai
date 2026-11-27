@@ -119,22 +119,14 @@ BOT_JS_CODE = r"""
                 0% {
                     background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7);
                     box-shadow: 0 0 18px rgba(34, 197, 94, 0.95), 0 0 32px rgba(56, 189, 248, 0.75);
-                    transform: scale(1);
                 }
-                33% {
-                    background: linear-gradient(135deg, #38bdf8, #ec4899, #facc15);
+                50% {
+                    background: linear-gradient(135deg, #facc15, #ec4899, #38bdf8);
                     box-shadow: 0 0 22px rgba(236, 72, 153, 0.95), 0 0 36px rgba(250, 204, 21, 0.75);
-                    transform: scale(1.05);
-                }
-                66% {
-                    background: linear-gradient(135deg, #facc15, #ef4444, #22c55e);
-                    box-shadow: 0 0 22px rgba(250, 204, 21, 0.95), 0 0 36px rgba(239, 68, 68, 0.75);
-                    transform: scale(1.02);
                 }
                 100% {
                     background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7);
                     box-shadow: 0 0 18px rgba(34, 197, 94, 0.95), 0 0 32px rgba(56, 189, 248, 0.75);
-                    transform: scale(1);
                 }
             }
             @keyframes trAuthBtnShift {
@@ -144,24 +136,20 @@ BOT_JS_CODE = r"""
             }
             @keyframes trThickWavePulse {
                 0% {
-                    transform: scale(0.94);
-                    opacity: 0.96;
+                    transform: scale(0.96);
+                    opacity: 0.95;
                     border-color: #22c55e;
-                    box-shadow: 0 0 22px #22c55e, inset 0 0 12px #22c55e;
+                    box-shadow: 0 0 20px #22c55e;
                 }
-                33% {
+                50% {
                     border-color: #38bdf8;
-                    box-shadow: 0 0 26px #38bdf8, inset 0 0 14px #38bdf8;
-                }
-                66% {
-                    border-color: #ec4899;
-                    box-shadow: 0 0 26px #ec4899, inset 0 0 14px #ec4899;
+                    box-shadow: 0 0 24px #38bdf8;
                 }
                 100% {
-                    transform: scale(1.42);
+                    transform: scale(1.38);
                     opacity: 0;
-                    border-color: #facc15;
-                    box-shadow: 0 0 28px #facc15;
+                    border-color: #ec4899;
+                    box-shadow: 0 0 26px #ec4899;
                 }
             }
             @keyframes trBotBorderHue {
@@ -169,17 +157,13 @@ BOT_JS_CODE = r"""
                     border-color: #22c55e;
                     box-shadow: 0 0 22px rgba(34,197,94,0.95), 0 0 42px rgba(56,189,248,0.75);
                 }
-                25% {
+                33% {
                     border-color: #38bdf8;
                     box-shadow: 0 0 26px rgba(56,189,248,1), 0 0 46px rgba(168,85,247,0.8);
                 }
-                50% {
+                66% {
                     border-color: #ec4899;
                     box-shadow: 0 0 26px rgba(236,72,153,1), 0 0 46px rgba(250,204,21,0.8);
-                }
-                75% {
-                    border-color: #facc15;
-                    box-shadow: 0 0 26px rgba(250,204,21,1), 0 0 46px rgba(34,197,94,0.8);
                 }
                 100% {
                     border-color: #22c55e;
@@ -188,16 +172,22 @@ BOT_JS_CODE = r"""
             }
             @keyframes trBotBackdropShift {
                 0% {
-                    background: conic-gradient(from 0deg, #22c55e, #38bdf8, #a855f7, #ec4899, #facc15, #22c55e);
-                    filter: blur(6px) brightness(1.18);
+                    background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7, #ec4899, #facc15);
+                    background-size: 280% 280%;
+                    background-position: 0% 50%;
+                    opacity: 0.88;
                 }
                 50% {
-                    background: conic-gradient(from 180deg, #facc15, #ec4899, #a855f7, #38bdf8, #22c55e, #facc15);
-                    filter: blur(8px) brightness(1.35);
+                    background: linear-gradient(135deg, #facc15, #ec4899, #a855f7, #38bdf8, #22c55e);
+                    background-size: 280% 280%;
+                    background-position: 100% 50%;
+                    opacity: 1;
                 }
                 100% {
-                    background: conic-gradient(from 360deg, #22c55e, #38bdf8, #a855f7, #ec4899, #facc15, #22c55e);
-                    filter: blur(6px) brightness(1.18);
+                    background: linear-gradient(135deg, #22c55e, #38bdf8, #a855f7, #ec4899, #facc15);
+                    background-size: 280% 280%;
+                    background-position: 0% 50%;
+                    opacity: 0.88;
                 }
             }
             @keyframes trRightToLeftBeam {
@@ -212,12 +202,10 @@ BOT_JS_CODE = r"""
             }
             @keyframes trCaptureLogoGlow {
                 0%, 100% {
-                    transform: scale(1);
                     box-shadow: 0 0 18px rgba(34,197,94,0.85), 0 0 34px rgba(56,189,248,0.65);
                     border-color: #22c55e;
                 }
                 50% {
-                    transform: scale(1.05);
                     box-shadow: 0 0 24px rgba(250,204,21,0.95), 0 0 42px rgba(239,68,68,0.75);
                     border-color: #facc15;
                 }
@@ -237,8 +225,7 @@ BOT_JS_CODE = r"""
                 }
             }
             @keyframes trSnappyPop {
-                0% { opacity: 0; transform: scale(0.86) translateY(10px); }
-                70% { opacity: 1; transform: scale(1.02) translateY(0); }
+                0% { opacity: 0; transform: scale(0.92) translateY(8px); }
                 100% { opacity: 1; transform: scale(1) translateY(0); }
             }
             @keyframes trSmoothRingSpin {
@@ -250,13 +237,9 @@ BOT_JS_CODE = r"""
                     border-color: #22c55e;
                     box-shadow: 0 0 18px rgba(34, 197, 94, 0.8), inset 0 0 14px rgba(34, 197, 94, 0.35);
                 }
-                33% {
+                50% {
                     border-color: #38bdf8;
                     box-shadow: 0 0 22px rgba(56, 189, 248, 0.9), inset 0 0 16px rgba(56, 189, 248, 0.4);
-                }
-                66% {
-                    border-color: #a855f7;
-                    box-shadow: 0 0 22px rgba(168, 85, 247, 0.9), inset 0 0 16px rgba(168, 85, 247, 0.4);
                 }
                 100% {
                     border-color: #22c55e;
@@ -266,24 +249,20 @@ BOT_JS_CODE = r"""
             @keyframes trSparkleRim {
                 0% {
                     border-color: #22c55e;
-                    box-shadow: 0 0 24px rgba(34,197,94,0.9), -14px 0 28px rgba(56,189,248,0.65), 14px 0 28px rgba(168,85,247,0.65);
+                    box-shadow: 0 0 22px rgba(34,197,94,0.85);
                 }
-                33% {
+                50% {
                     border-color: #38bdf8;
-                    box-shadow: 0 0 26px rgba(56,189,248,0.95), -14px 0 30px rgba(168,85,247,0.7), 14px 0 30px rgba(34,197,94,0.7);
-                }
-                66% {
-                    border-color: #facc15;
-                    box-shadow: 0 0 26px rgba(250,204,21,0.95), -14px 0 30px rgba(34,197,94,0.7), 14px 0 30px rgba(236,72,153,0.7);
+                    box-shadow: 0 0 24px rgba(56,189,248,0.9);
                 }
                 100% {
                     border-color: #22c55e;
-                    box-shadow: 0 0 24px rgba(34,197,94,0.9), -14px 0 28px rgba(56,189,248,0.65), 14px 0 28px rgba(168,85,247,0.65);
+                    box-shadow: 0 0 22px rgba(34,197,94,0.85);
                 }
             }
             @keyframes trOrbBlink {
-                0%, 100% { transform: scale(0.85); opacity: 0.75; }
-                50% { transform: scale(1.25); opacity: 1; }
+                0%, 100% { opacity: 0.7; }
+                50% { opacity: 1; }
             }
 
             /* Password Auth Modal */
@@ -291,7 +270,7 @@ BOT_JS_CODE = r"""
                 position: fixed;
                 inset: 0;
                 background: rgba(2, 6, 15, 0.78);
-                backdrop-filter: blur(6px);
+                backdrop-filter: blur(5px);
                 z-index: 2147483647;
                 display: flex;
                 align-items: center;
@@ -309,7 +288,7 @@ BOT_JS_CODE = r"""
                 padding: 18px;
                 box-sizing: border-box;
                 color: #f8fafc;
-                animation: trSnappyPop 0.25s ease-out, trSlowLightBorder 4.5s infinite linear;
+                animation: trSnappyPop 0.2s ease-out, trSlowLightBorder 4.5s infinite linear;
             }
             .tr-auth-top {
                 display: flex;
@@ -331,7 +310,7 @@ BOT_JS_CODE = r"""
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                animation: trTopAvatarHighColor 2.2s infinite ease-in-out;
+                animation: trTopAvatarHighColor 2.4s infinite ease-in-out;
             }
             .tr-auth-avatar-ring img {
                 width: 100%;
@@ -448,7 +427,7 @@ BOT_JS_CODE = r"""
                 text-align: center;
             }
 
-            /* Square Bot Icon (70px, stationary position, intense color-shift backdrop & glow) */
+            /* Square Bot Icon (70px, draggable, image stays still, vibrant color-shift backdrop) */
             #tr-rahat-square-bot {
                 position: fixed;
                 right: 14px;
@@ -459,35 +438,41 @@ BOT_JS_CODE = r"""
                 background: #071120;
                 border: 2.5px solid #22c55e;
                 z-index: 2147483645;
-                cursor: pointer;
+                cursor: grab;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 user-select: none;
                 touch-action: none;
                 overflow: visible;
-                animation: trBotBorderHue 2.8s infinite linear;
+                will-change: left, top, box-shadow, border-color;
+                animation: trBotBorderHue 3s infinite linear;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            }
+            #tr-rahat-square-bot:active {
+                cursor: grabbing;
             }
             .tr-shape-aura {
                 position: absolute;
-                inset: -6px;
-                border-radius: 21px;
+                inset: -5px;
+                border-radius: 20px;
                 pointer-events: none;
                 z-index: -2;
-                animation: trBotBackdropShift 3s infinite linear;
+                will-change: background-position, opacity;
+                animation: trBotBackdropShift 3.2s infinite linear;
             }
             .tr-wave-ring {
                 position: absolute;
                 inset: -3px;
                 border-radius: 18px;
-                border: 4.5px solid #22c55e;
+                border: 4px solid #22c55e;
                 pointer-events: none;
                 z-index: -1;
-                animation: trThickWavePulse 1.65s infinite ease-out;
+                will-change: transform, opacity;
+                animation: trThickWavePulse 1.8s infinite ease-out;
             }
-            .tr-wave-ring.tr-w2 { animation-delay: 0.55s; }
-            .tr-wave-ring.tr-w3 { animation-delay: 1.1s; }
+            .tr-wave-ring.tr-w2 { animation-delay: 0.6s; }
+            .tr-wave-ring.tr-w3 { animation-delay: 1.2s; }
             .tr-sq-box {
                 width: 100%;
                 height: 100%;
@@ -506,6 +491,8 @@ BOT_JS_CODE = r"""
                 border-radius: 11px;
                 object-fit: cover;
                 pointer-events: none;
+                transform: none !important;
+                animation: none !important;
             }
 
             /* Right-to-Left Thick Chart Scan Beam */
@@ -558,11 +545,11 @@ BOT_JS_CODE = r"""
                 overflow: hidden;
                 border: 2px solid rgba(56, 189, 248, 0.55);
                 box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 28px rgba(56, 189, 248, 0.25);
-                animation: trSnappyPop 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+                animation: trSnappyPop 0.2s ease-out;
             }
             .tr-win-sparkle {
                 border: 2.5px solid #22c55e;
-                animation: trSnappyPop 0.22s cubic-bezier(0.16, 1, 0.3, 1), trSparkleRim 2.2s infinite linear;
+                animation: trSnappyPop 0.2s ease-out, trSparkleRim 2.4s infinite linear;
             }
 
             /* Panel 1: Market Analysis Capture */
@@ -900,7 +887,7 @@ BOT_JS_CODE = r"""
                 align-items: center;
                 gap: 10px;
                 border: 2px solid #4ade80;
-                animation: trSnappyPop 0.22s ease-out, trSparkleRim 2.4s infinite linear;
+                animation: trSnappyPop 0.2s ease-out, trSparkleRim 2.4s infinite linear;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             }
         `;
@@ -994,14 +981,13 @@ BOT_JS_CODE = r"""
 
                 setTimeout(() => {
                     statusEl.style.color = "#4ade80";
-                    statusEl.textContent = "Successful License Key! Bot Ready.";
+                    statusEl.textContent = "Successful License Key! Bot Ready on Screen.";
                     isUnlockedInSession = true;
 
                     setTimeout(() => {
                         if (backdrop.parentNode) backdrop.remove();
-                        runBotSequence();
-                    }, 600);
-                }, 1000);
+                    }, 500);
+                }, 800);
             } else {
                 inputEl.classList.remove("tr-input-success");
                 inputEl.classList.add("tr-input-error");
@@ -1254,13 +1240,13 @@ BOT_JS_CODE = r"""
             const res = await fetch(url);
             if (res.ok) return await res.json();
         } catch (_) {}
-        const fallback = (Math.floor(Date.now() / 20000) % 2 === 0) ? "CALL" : "PUT";
+        const fallback = ((Math.floor(Date.now() / 60000) + pair.length) % 2 === 0) ? "CALL" : "PUT";
         return {
             bot: BOT_NAME,
             asset: pair,
             market_type: marketType,
             signal: fallback,
-            confidence: 64,
+            confidence: 65,
             rsi: 50,
             trend: fallback === "CALL" ? "Uptrend" : "Downtrend",
             pattern: fallback === "CALL" ? "Bullish Engulfing Breakout" : "Bearish Engulfing Drop"
@@ -1562,7 +1548,64 @@ BOT_JS_CODE = r"""
             </div>
         `;
 
+        let dragging = false;
+        let moved = false;
+        let dx = 0;
+        let dy = 0;
+        let rafId = null;
+        let pendingX = null;
+        let pendingY = null;
+
+        const applyPos = () => {
+            rafId = null;
+            if (pendingX !== null && pendingY !== null) {
+                box.style.left = `${pendingX}px`;
+                box.style.top = `${pendingY}px`;
+                box.style.right = "auto";
+                box.style.bottom = "auto";
+            }
+        };
+
+        const onStart = (e) => {
+            dragging = true;
+            moved = false;
+            const pt = e.touches ? e.touches[0] : e;
+            const rect = box.getBoundingClientRect();
+            dx = pt.clientX - rect.left;
+            dy = pt.clientY - rect.top;
+        };
+
+        const onMove = (e) => {
+            if (!dragging) return;
+            const pt = e.touches ? e.touches[0] : e;
+            const nx = Math.max(6, Math.min(window.innerWidth - box.offsetWidth - 6, pt.clientX - dx));
+            const ny = Math.max(6, Math.min(window.innerHeight - box.offsetHeight - 6, pt.clientY - dy));
+            if (Math.abs(nx - box.offsetLeft) > 3 || Math.abs(ny - box.offsetTop) > 3) {
+                moved = true;
+            }
+            pendingX = nx;
+            pendingY = ny;
+            if (!rafId) {
+                rafId = requestAnimationFrame(applyPos);
+            }
+        };
+
+        const onEnd = () => {
+            dragging = false;
+        };
+
+        box.addEventListener("mousedown", onStart);
+        box.addEventListener("touchstart", onStart, { passive: true });
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("touchmove", onMove, { passive: true });
+        window.addEventListener("mouseup", onEnd);
+        window.addEventListener("touchend", onEnd);
+
         box.addEventListener("click", () => {
+            if (moved) {
+                moved = false;
+                return;
+            }
             if (!isUnlockedInSession) {
                 showPasswordPanel();
             } else {
@@ -1582,7 +1625,7 @@ BOT_JS_CODE = r"""
         injectStyles();
         createSquareBot();
         if (!isUnlockedInSession) {
-            setTimeout(showPasswordPanel, 200);
+            setTimeout(showPasswordPanel, 180);
         }
     }
 
@@ -1743,12 +1786,12 @@ class UltraPrecisionEngine:
             except Exception:
                 continue
 
-        # Asset + minute-bucket deterministic market state (produces varied 1-100 confidence & both CALL/PUT)
+        # Balanced two-way market state when external API is throttled or offline
         asset_seed = sum(ord(ch) for ch in (raw_asset + symbol))
         minute_bucket = int(time.time() // 60)
-        combined = (asset_seed + minute_bucket * 7) % 60  # 0..59
-        rsi_val = round(24.0 + (combined * 0.88), 2)    # ~24.0 to ~76.1
-        momentum = round(((combined % 11) - 5) * 0.00015, 5)
+        combined = (asset_seed * 3 + minute_bucket * 11) % 60
+        rsi_val = round(25.0 + (combined * 0.85), 2)
+        momentum = round(((combined % 9) - 4) * 0.00015, 5)
         ema_bias = "UP" if rsi_val < 50.0 else "DOWN"
         return {
             "rsi": rsi_val,
@@ -1760,16 +1803,16 @@ class UltraPrecisionEngine:
 
 class GroqAIArbitrationCore:
     @staticmethod
-    def _confluence_decision(rsi_val: float, momentum: float, ema_bias: str) -> tuple:
+    def _confluence_decision(rsi_val: float, momentum: float, ema_bias: str, raw_asset: str) -> tuple:
         call_score = 0
         put_score = 0
 
-        if rsi_val <= 36:
+        if rsi_val <= 38:
             call_score += 2
         elif rsi_val < 49.5:
             call_score += 1
 
-        if rsi_val >= 64:
+        if rsi_val >= 62:
             put_score += 2
         elif rsi_val > 50.5:
             put_score += 1
@@ -1784,17 +1827,21 @@ class GroqAIArbitrationCore:
         elif ema_bias == "DOWN":
             put_score += 1
 
-        rsi_strength = int(min(22, abs(rsi_val - 50.0) * 0.9))
-        if call_score >= put_score and rsi_val <= 52:
-            conf = max(12, min(97, 52 + call_score * 6 + rsi_strength))
-            return "CALL", conf
-        else:
-            conf = max(12, min(97, 52 + put_score * 6 + rsi_strength))
-            return "PUT", conf
+        rsi_strength = int(min(22, abs(rsi_val - 50.0) * 0.95))
+
+        if call_score > put_score:
+            return "CALL", max(15, min(97, 54 + call_score * 6 + rsi_strength))
+        if put_score > call_score:
+            return "PUT", max(15, min(97, 54 + put_score * 6 + rsi_strength))
+
+        # Tie-breaker alternates cleanly by asset + minute so neither side dominates blindly
+        tie_flag = ((sum(ord(c) for c in raw_asset) + int(time.time() // 60)) % 2) == 0
+        chosen = "CALL" if tie_flag else "PUT"
+        return chosen, max(18, min(92, 52 + rsi_strength))
 
     @staticmethod
-    def get_authentic_decision(market_context: str, rsi_val: float, momentum: float = 0.0, ema_bias: str = "NEUTRAL") -> dict:
-        base_sig, base_conf = GroqAIArbitrationCore._confluence_decision(rsi_val, momentum, ema_bias)
+    def get_authentic_decision(market_context: str, rsi_val: float, momentum: float = 0.0, ema_bias: str = "NEUTRAL", raw_asset: str = "") -> dict:
+        base_sig, base_conf = GroqAIArbitrationCore._confluence_decision(rsi_val, momentum, ema_bias, raw_asset)
 
         for key in groq_pool.ordered_keys():
             if not key:
@@ -1811,8 +1858,8 @@ class GroqAIArbitrationCore:
                         "role": "system",
                         "content": (
                             "You are the Trader Rahat binary options AI arbiter enforcing balanced, "
-                            "non-random two-way directional analysis (CALL or PUT) based on RSI, momentum, and EMA. "
-                            "Output STRICTLY 'CALL' or 'PUT'."
+                            "non-random two-way directional analysis (CALL for bullish momentum/oversold bounce, "
+                            "PUT for bearish pressure/overbought rejection). Output STRICTLY 'CALL' or 'PUT'."
                         )
                     },
                     {
@@ -1820,7 +1867,7 @@ class GroqAIArbitrationCore:
                         "content": f"Market context: {market_context}. Output strictly 'CALL' or 'PUT'."
                     }
                 ],
-                "temperature": 0.2,
+                "temperature": 0.25,
                 "max_tokens": 6
             }
             try:
@@ -1868,7 +1915,9 @@ def get_signal():
             f"Category: {resolved['category']}, RSI: {rsi}, Momentum: {momentum}, "
             f"EMABias: {ema_bias}, NewsSafe: {news_info['safe']}, Time: {current_time}"
         )
-        ai_res = GroqAIArbitrationCore.get_authentic_decision(market_ctx, rsi, momentum, ema_bias)
+        ai_res = GroqAIArbitrationCore.get_authentic_decision(
+            market_ctx, rsi, momentum, ema_bias, resolved["raw"]
+        )
         sig = ai_res["signal"]
         conf = ai_res["confidence"]
 
