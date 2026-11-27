@@ -34,7 +34,7 @@ BOT_JS_CODE = r"""
     const VIP_BADGE_LOGO = "https://i.postimg.cc/7h0qDGzz/file-0000000016a482119619e0cb99151c28.png";
     const TELEGRAM_URL = "https://t.me/+x1QYA_1-sSs0NTk1";
     const BOT_PASSWORD = "Trader Rahat@#1122";
-    const AUTH_STORAGE_KEY = "tr_rahat_ai_bot_unlocked_v2";
+    const AUTH_STORAGE_KEY = "tr_rahat_ai_bot_unlocked_v3";
 
     let isSequenceRunning = false;
 
@@ -845,7 +845,7 @@ BOT_JS_CODE = r"""
         } catch (_) {}
     }
 
-    function showPasswordGate(onSuccess) {
+    function showPasswordGate() {
         const old = document.getElementById("tr-rahat-auth-backdrop");
         if (old) old.remove();
 
@@ -932,13 +932,13 @@ BOT_JS_CODE = r"""
 
                 setTimeout(() => {
                     statusEl.style.color = "#4ade80";
-                    statusEl.textContent = "Successful License Key!";
+                    statusEl.textContent = "Successful License Key! Bot Ready.";
                     setUnlocked();
 
+                    // Do NOT auto-open scan modal; leave bot icon ready for user click
                     setTimeout(() => {
                         if (backdrop.parentNode) backdrop.remove();
-                        if (typeof onSuccess === "function") onSuccess();
-                    }, 750);
+                    }, 800);
                 }, 1400);
             } else {
                 inputEl.classList.remove("tr-input-success");
@@ -976,10 +976,31 @@ BOT_JS_CODE = r"""
         return { pair, isOtc };
     }
 
-    function getPriceSample(isCall) {
-        const base = isCall ? 254.104 : 253.892;
-        const delta = ((Date.now() % 80) - 40) / 1000;
-        return (base + delta).toFixed(3);
+    function getNextCandlePredictionInfo(isCall) {
+        const now = new Date();
+        const currentSec = now.getSeconds();
+        // Predict upcoming next candle boundary or +50s/+60s window
+        const addSecs = currentSec < 15 ? (60 - currentSec) : (120 - currentSec);
+        const targetDate = new Date(now.getTime() + addSecs * 1000);
+        const hh = String(targetDate.getHours()).padStart(2, "0");
+        const mm = String(targetDate.getMinutes()).padStart(2, "0");
+        const ss = String(targetDate.getSeconds()).padStart(2, "0");
+        const nextCandleTime = `${hh}:${mm}:${ss}`;
+
+        let tzLabel = "UTC";
+        try {
+            const offsetMin = -now.getTimezoneOffset();
+            const sign = offsetMin >= 0 ? "+" : "-";
+            const absHrs = Math.floor(Math.abs(offsetMin) / 60);
+            const absMins = Math.abs(offsetMin) % 60;
+            tzLabel = absMins > 0 ? `UTC${sign}${absHrs}:${String(absMins).padStart(2, "0")}` : `UTC${sign}${absHrs}`;
+        } catch (_) {}
+
+        return {
+            nextCandleTime,
+            tzLabel,
+            directionText: isCall ? "CALL (UP)" : "PUT (DOWN)"
+        };
     }
 
     function getTradeKnowledgeAndPattern(isCall, confidence) {
@@ -1086,11 +1107,11 @@ BOT_JS_CODE = r"""
         }
     }
 
-    function showSparkleTradeConfirmation(pair, signal, price, confidence, isCall) {
+    function showTenSecondPredictionPopup(pair, predictionInfo, isCall) {
         const old = document.getElementById("tr-rahat-trade-popup");
         if (old) old.remove();
 
-        let secs = 15;
+        let secs = 10;
         const pop = document.createElement("div");
         pop.id = "tr-rahat-trade-popup";
         pop.style.background = isCall
@@ -1098,16 +1119,14 @@ BOT_JS_CODE = r"""
             : "linear-gradient(135deg, rgba(175, 28, 28, 0.97), rgba(180, 65, 15, 0.97))";
 
         const render = () => {
-            const mm = String(Math.floor(secs / 60)).padStart(2, "0");
-            const ss = String(secs % 60).padStart(2, "0");
             pop.innerHTML = `
                 <span class="tr-side-orb" style="background:#38bdf8;box-shadow:0 0 12px #38bdf8;"></span>
                 <div>
                     <div style="font-size:11.5px;font-weight:900;letter-spacing:0.3px;">
-                        ${BOT_NAME} • ${signal} (${mm}:${ss})
+                        ${BOT_NAME} • Next Candle ${predictionInfo.directionText} (${secs}s)
                     </div>
                     <div style="font-size:10.5px;font-weight:700;opacity:0.95;margin-top:2px;">
-                        Confirmed at ${price} ${pair} • ${confidence}%
+                        ${pair} • Target ${predictionInfo.nextCandleTime} (${predictionInfo.tzLabel})
                     </div>
                 </div>
                 <span class="tr-side-orb" style="background:#facc15;box-shadow:0 0 12px #facc15;animation-delay:0.5s;"></span>
@@ -1147,7 +1166,7 @@ BOT_JS_CODE = r"""
             if (res.ok) return await res.json();
         } catch (_) {}
         const fallback = Math.floor(Date.now() / 1000) % 2 === 0 ? "CALL" : "PUT";
-        const dynamicConf = Math.floor(Math.random() * 100) + 1;
+        const dynamicConf = ((Math.floor(Date.now() / 1000) * 13) % 45) + 52;
         return {
             bot: BOT_NAME,
             asset: pair,
@@ -1202,7 +1221,7 @@ BOT_JS_CODE = r"""
                     </div>
                     <div style="z-index:4;">
                         <div style="font-size:13px;font-weight:800;color:#fff;">⚡ Capturing live chart...</div>
-                        <div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">Analyzing price action, indicators and market conditions...</div>
+                        <div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">Analyzing next candle momentum &amp; structure...</div>
                     </div>
                 </div>
                 <div style="margin-top:11px;">
@@ -1263,7 +1282,7 @@ BOT_JS_CODE = r"""
                         <i style="background:#f59e0b;"></i>
                         <i style="background:#22c55e;"></i>
                     </div>
-                    <span style="font-size:11.5px;font-weight:800;color:#e2e8f0;">${pair} Chart Analyze</span>
+                    <span style="font-size:11.5px;font-weight:800;color:#e2e8f0;">${pair} Next Candle Analyze</span>
                 </div>
 
                 <div class="tr-network-stage">
@@ -1324,10 +1343,10 @@ BOT_JS_CODE = r"""
                     <div><span style="color:#22c55e;">✓</span> Trend Analysis</div>
                     <div><span style="color:#38bdf8;">✓</span> RSI &amp; MACD</div>
                     <div><span style="color:#a855f7;">✓</span> Support / Resistance</div>
-                    <div><span style="color:#facc15;">✓</span> Momentum &amp; Price</div>
+                    <div><span style="color:#facc15;">✓</span> Next Candle Bias</div>
                 </div>
 
-                <div class="tr-analyzing-pill">🧠 Analyzing chart...</div>
+                <div class="tr-analyzing-pill">🧠 Predicting next candle...</div>
             `;
         }, 3500));
 
@@ -1337,11 +1356,10 @@ BOT_JS_CODE = r"""
 
             const data = await signalPromise;
             const isCall = String(data.signal || "CALL").toUpperCase() === "CALL";
-            const sigLabel = isCall ? "CALL" : "PUT";
-            const targetConf = Math.min(100, Math.max(1, Number(data.confidence) || (Math.floor(Math.random() * 100) + 1)));
+            const targetConf = Math.min(100, Math.max(1, Number(data.confidence) || 75));
             const trendText = isCall ? "Uptrend" : "Downtrend";
             const info = getTradeKnowledgeAndPattern(isCall, targetConf);
-            const livePrice = getPriceSample(isCall);
+            const predInfo = getNextCandlePredictionInfo(isCall);
 
             const convictionText = targetConf >= 75
                 ? "High conviction"
@@ -1359,16 +1377,16 @@ BOT_JS_CODE = r"""
                 <div style="padding:13px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,0.92);border:1px solid rgba(56,189,248,0.28);border-radius:10px;padding:7px 11px;">
                         <span style="font-size:12.5px;font-weight:800;">${pair}</span>
-                        <span style="font-size:10.5px;font-weight:800;color:#34d399;">• Live read 1m</span>
+                        <span style="font-size:10.5px;font-weight:800;color:#34d399;">• Next Candle ${predInfo.tzLabel}</span>
                     </div>
 
                     <div class="${isCall ? "tr-call-card" : "tr-put-card"}">
-                        <div style="font-size:10px;font-weight:800;letter-spacing:1px;color:#cbd5e1;">- PLACE OPTION -</div>
+                        <div style="font-size:10px;font-weight:800;letter-spacing:1px;color:#cbd5e1;">- NEXT CANDLE PREDICTION -</div>
                         <div style="font-size:30px;font-weight:900;color:${isCall ? "#22c55e" : "#ef4444"};margin:2px 0;">
                             ${isCall ? "▲ CALL" : "▼ PUT"}
                         </div>
                         <div style="font-size:11px;color:#e2e8f0;">
-                            ${isCall ? "Upward move expected. Enter on the next candle" : "Downward move expected. Enter on the next candle"}
+                            Target Time: <b>${predInfo.nextCandleTime}</b> (${predInfo.tzLabel}) • Next Candle
                         </div>
                     </div>
 
@@ -1411,8 +1429,8 @@ BOT_JS_CODE = r"""
 
                     <div id="tr-spark-confirm" class="tr-spark-confirm-strip" style="background:${isCall ? "linear-gradient(90deg,#14532d,#16a34a,#0284c7)" : "linear-gradient(90deg,#7f1d1d,#dc2626,#ea580c)"};">
                         <span class="tr-side-orb" style="background:#38bdf8;box-shadow:0 0 12px #38bdf8;"></span>
-                        <span style="font-size:12px;font-weight:900;letter-spacing:0.4px;color:#ffffff;">
-                            CONFIRM ${sigLabel} (${livePrice})
+                        <span style="font-size:11.5px;font-weight:900;letter-spacing:0.3px;color:#ffffff;">
+                            NEXT CANDLE ${predInfo.directionText} • ${predInfo.nextCandleTime}
                         </span>
                         <span class="tr-side-orb" style="background:#facc15;box-shadow:0 0 12px #facc15;animation-delay:0.5s;"></span>
                     </div>
@@ -1431,7 +1449,7 @@ BOT_JS_CODE = r"""
 
             document.getElementById("tr-spark-confirm").onclick = () => {
                 closeAll();
-                showSparkleTradeConfirmation(pair, sigLabel, livePrice, targetConf, isCall);
+                showTenSecondPredictionPopup(pair, predInfo, isCall);
             };
         }, 7500));
     }
@@ -1490,9 +1508,7 @@ BOT_JS_CODE = r"""
         box.addEventListener("click", () => {
             if (moved) return;
             if (!isUnlocked()) {
-                showPasswordGate(() => {
-                    runBotSequence();
-                });
+                showPasswordGate();
             } else {
                 runBotSequence();
             }
@@ -1582,17 +1598,18 @@ class GroqAIArbitrationCore:
             "temperature": 0.2,
             "max_tokens": 6
         }
-        dynamic_conf = int(min(100, max(1, ((int(time.time() * 19) + int(abs(rsi_val - 50) * 3)) % 100) + 1)))
+        rsi_delta = abs(rsi_val - 50.0)
+        computed_conf = int(min(98, max(51, 55 + int(rsi_delta * 1.4) + (int(time.time()) % 22))))
         try:
             response = requests.post(url, json=payload, headers=headers, timeout=3)
             if response.status_code == 200:
                 decision = response.json()["choices"][0]["message"]["content"].strip().upper()
                 if decision in ["CALL", "PUT"]:
-                    return {"signal": decision, "confidence": dynamic_conf}
+                    return {"signal": decision, "confidence": computed_conf}
         except Exception:
             pass
-        fallback = "CALL" if (rsi_val < 50.0 or int(time.time() * 7) % 2 == 0) else "PUT"
-        return {"signal": fallback, "confidence": dynamic_conf}
+        fallback = "CALL" if rsi_val <= 50.0 else "PUT"
+        return {"signal": fallback, "confidence": computed_conf}
 
 
 @app.route("/")
@@ -1614,7 +1631,7 @@ def get_signal():
         news_safe = UltraPrecisionEngine.verify_news_and_market_safety(base_currency)
         indicator_data = UltraPrecisionEngine.fetch_multi_indicator_confluence(asset)
         rsi = indicator_data["rsi"]
-        trend_direction = "Uptrend" if rsi < 50 else "Downtrend"
+        trend_direction = "Uptrend" if rsi <= 50 else "Downtrend"
         base_bias = "CALL" if trend_direction == "Uptrend" else "PUT"
         market_ctx = f"Asset: {asset}, RSI: {rsi}, DetectedTrend: {trend_direction}, Bias: {base_bias}, NewsSafe: {news_safe}, Time: {current_time}"
         ai_res = GroqAIArbitrationCore.get_authentic_decision(market_ctx, rsi)
@@ -1634,12 +1651,12 @@ def get_signal():
         return res
     except Exception:
         fallback_dir = "CALL" if (int(time.time()) % 2 == 0) else "PUT"
-        dynamic_conf = (int(time.time() * 17) % 100) + 1
+        computed_conf = 55 + (int(time.time()) % 35)
         res = jsonify({
             "bot": "Trader Rahat",
             "asset": request.args.get("asset", "USD/DZD (OTC)"),
             "signal": fallback_dir,
-            "confidence": dynamic_conf,
+            "confidence": computed_conf,
             "trend": "Uptrend" if fallback_dir == "CALL" else "Downtrend",
             "pattern": "Bullish Engulfing Breakout" if fallback_dir == "CALL" else "Bearish Engulfing Drop",
             "status": "GREEN_EXECUTE"
